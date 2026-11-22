@@ -17,8 +17,16 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
   const [soundEnabled, setSoundEnabled] = useState(false);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
+  // Accessibility: prefers-reduced-motion
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
   // Floating inverting wordmark toggle
   const [wordmarkMorph, setWordmarkMorph] = useState<0 | 1>(0);
+
+  // Focus management refs
+  const gateRef = useRef<HTMLDivElement>(null);
+  const skipBtnRef = useRef<HTMLButtonElement>(null);
+  const runwayRef = useRef<HTMLElement>(null);
 
   // Carousel physics & drag references
   const reelRef = useRef<HTMLDivElement>(null);
@@ -57,7 +65,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
     })),
   ];
 
-  // 1. Initial Gate Check with sessionStorage & automated test awareness
+  // 1. Initial Gate Check with sessionStorage, automated test awareness & runtime reduced-motion detection
   useEffect(() => {
     const hasUnlocked = sessionStorage.getItem("su_gate_unlocked");
     const isAutomated = typeof navigator !== "undefined" && Boolean(navigator.webdriver);
@@ -65,17 +73,67 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
       setGateOpen(true);
     }
     setSoundEnabled(!audio.isMuted());
+
+    // Listen for runtime prefers-reduced-motion changes
+    if (typeof window !== "undefined" && window.matchMedia) {
+      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      setPrefersReducedMotion(mediaQuery.matches);
+      const handleMotionPreferenceChange = (e: MediaQueryListEvent) => {
+        setPrefersReducedMotion(e.matches);
+      };
+      mediaQuery.addEventListener("change", handleMotionPreferenceChange);
+      return () => mediaQuery.removeEventListener("change", handleMotionPreferenceChange);
+    }
   }, []);
 
-  // 2. Wordmark Morph Loop
+  // 2. Initial Focus on Skip Intro button when Gate is active
   useEffect(() => {
+    if (!gateOpen && skipBtnRef.current) {
+      skipBtnRef.current.focus();
+    }
+  }, [gateOpen]);
+
+  // 3. Wordmark Morph Loop (disabled if user prefers reduced motion)
+  useEffect(() => {
+    if (prefersReducedMotion) return;
     const interval = setInterval(() => {
       setWordmarkMorph((prev) => (prev === 0 ? 1 : 0));
     }, 3200);
     return () => clearInterval(interval);
-  }, []);
+  }, [prefersReducedMotion]);
 
-  // 3. Unlock Gate Action
+  // 4. Focus Trap & Escape key inside Gate dialog
+  const handleGateKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      handleEnter(false);
+      return;
+    }
+
+    if (e.key === "Tab" && gateRef.current) {
+      const focusable = gateRef.current.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+
+      const firstElement = focusable[0];
+      const lastElement = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    }
+  };
+
+  // 5. Unlock Gate Action with focus restoration to runway
   const handleEnter = (withSound: boolean) => {
     if (withSound) {
       audio.setMuted(false);
@@ -86,11 +144,19 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
       setSoundEnabled(false);
     }
 
+    if (prefersReducedMotion) {
+      setGateOpen(true);
+      sessionStorage.setItem("su_gate_unlocked", "true");
+      setTimeout(() => runwayRef.current?.focus(), 50);
+      return;
+    }
+
     setGateFading(true);
     setTimeout(() => {
       setGateOpen(true);
       setGateFading(false);
       sessionStorage.setItem("su_gate_unlocked", "true");
+      runwayRef.current?.focus();
     }, 600);
   };
 
@@ -107,7 +173,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
     setSoundEnabled(!muted);
   };
 
-  // 4. Horizontal Scroll & Drag Physics
+  // 6. Horizontal Scroll & Drag Physics
   const updateProgress = useCallback(() => {
     if (!reelRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = reelRef.current;
@@ -171,15 +237,86 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
     isDraggingRef.current = false;
   };
 
-  // Filmstrip Ruler Scrubber Click
+  // 7. Keyboard Navigation for Reel
+  const handleReelKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!reelRef.current) return;
+    const scrollStep = 420;
+    const clientWidth = reelRef.current.clientWidth;
+    const maxScroll = reelRef.current.scrollWidth - clientWidth;
+    const behavior = prefersReducedMotion ? "auto" : "smooth";
+
+    switch (e.key) {
+      case "ArrowRight":
+        e.preventDefault();
+        reelRef.current.scrollBy({ left: scrollStep, behavior });
+        break;
+      case "ArrowLeft":
+        e.preventDefault();
+        reelRef.current.scrollBy({ left: -scrollStep, behavior });
+        break;
+      case "PageDown":
+        e.preventDefault();
+        reelRef.current.scrollBy({ left: clientWidth, behavior });
+        break;
+      case "PageUp":
+        e.preventDefault();
+        reelRef.current.scrollBy({ left: -clientWidth, behavior });
+        break;
+      case "Home":
+        e.preventDefault();
+        reelRef.current.scrollTo({ left: 0, behavior });
+        break;
+      case "End":
+        e.preventDefault();
+        reelRef.current.scrollTo({ left: maxScroll, behavior });
+        break;
+    }
+  };
+
+  // 8. Filmstrip Ruler Scrubber Click & Keyboard Slider
   const handleRulerClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!reelRef.current) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
     const ratio = Math.max(0, Math.min(1, clickX / rect.width));
     const maxScroll = reelRef.current.scrollWidth - reelRef.current.clientWidth;
-    reelRef.current.scrollTo({ left: ratio * maxScroll, behavior: "smooth" });
+    reelRef.current.scrollTo({
+      left: ratio * maxScroll,
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+    });
     audio.playTickSound(1.4);
+  };
+
+  const handleRulerKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!reelRef.current) return;
+    const maxScroll = reelRef.current.scrollWidth - reelRef.current.clientWidth;
+    const step = Math.max(40, maxScroll * 0.05);
+    const behavior = prefersReducedMotion ? "auto" : "smooth";
+
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowUp":
+        e.preventDefault();
+        reelRef.current.scrollBy({ left: step, behavior });
+        audio.playTickSound(1.4);
+        break;
+      case "ArrowLeft":
+      case "ArrowDown":
+        e.preventDefault();
+        reelRef.current.scrollBy({ left: -step, behavior });
+        audio.playTickSound(1.4);
+        break;
+      case "Home":
+        e.preventDefault();
+        reelRef.current.scrollTo({ left: 0, behavior });
+        audio.playTickSound(1.4);
+        break;
+      case "End":
+        e.preventDefault();
+        reelRef.current.scrollTo({ left: maxScroll, behavior });
+        audio.playTickSound(1.4);
+        break;
+    }
   };
 
   // Scroll to bottom timeline
@@ -187,7 +324,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
     e.preventDefault();
     const target = document.getElementById("timeline");
     if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
+      target.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" });
     }
   };
 
@@ -198,7 +335,11 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
       {/* ========================================================================= */}
       {!gateOpen && (
         <div
-          className={`fixed inset-0 z-[9999] bg-stone-100 text-stone-900 flex flex-col justify-between p-6 sm:p-10 md:p-16 transition-all duration-700 ease-in-out select-none ${
+          ref={gateRef}
+          onKeyDown={handleGateKeyDown}
+          className={`fixed inset-0 z-[9999] bg-stone-100 text-stone-900 flex flex-col justify-between p-6 sm:p-10 md:p-16 select-none ${
+            prefersReducedMotion ? "transition-none" : "transition-all duration-700 ease-in-out"
+          } ${
             gateFading
               ? "-translate-y-full opacity-0 pointer-events-none"
               : "translate-y-0 opacity-100"
@@ -220,6 +361,17 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
                 <span className="inline-block w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
                 LIVE ARCHIVE
               </span>
+              {/* Skip Intro Control (Top Right Accessible Fast Path) */}
+              <button
+                ref={skipBtnRef}
+                type="button"
+                onClick={() => handleEnter(false)}
+                className="px-3.5 py-2 min-h-[44px] min-w-[44px] text-xs font-mono uppercase border border-stone-400 bg-stone-200/90 hover:bg-stone-300 text-stone-900 font-bold flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-stone-950 focus-visible:outline-none transition-colors cursor-pointer"
+                aria-label="Skip Studio Introduction and Enter Directly"
+              >
+                <span>Skip Intro</span>
+                <span>→</span>
+              </button>
             </div>
           </div>
 
@@ -240,12 +392,12 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
                 diffusion concept ablation monographs engineered with mathematical rigor.
               </p>
 
-              {/* Enter Actions with Audio Synthesis */}
+              {/* Enter Actions with Audio Synthesis and Accessible Target Heights (>= 44px) */}
               <div className="pt-4 flex flex-wrap items-center gap-4 font-mono text-xs uppercase tracking-wider">
                 <button
                   type="button"
                   onClick={() => handleEnter(true)}
-                  className="bg-stone-950 hover:bg-stone-800 text-stone-50 px-6 py-3.5 font-bold transition-all flex items-center gap-2 cursor-pointer shadow-xl hover:scale-[1.02] active:scale-[0.98]"
+                  className="bg-stone-950 hover:bg-stone-800 text-stone-50 px-6 py-3.5 min-h-[44px] font-bold transition-all flex items-center gap-2 cursor-pointer shadow-xl hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-stone-900 focus-visible:outline-none"
                 >
                   <span>Enter Archive with Sound</span>
                   <span>→</span>
@@ -253,9 +405,16 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
                 <button
                   type="button"
                   onClick={() => handleEnter(false)}
-                  className="border border-stone-400 hover:border-stone-900 text-stone-800 px-5 py-3.5 transition-colors cursor-pointer"
+                  className="border border-stone-400 hover:border-stone-900 text-stone-800 px-5 py-3.5 min-h-[44px] transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-stone-900 focus-visible:outline-none"
                 >
                   Enter Silently
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleEnter(false)}
+                  className="text-stone-600 hover:text-stone-950 px-3 py-3.5 min-h-[44px] underline decoration-stone-400 underline-offset-4 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-stone-900 focus-visible:outline-none"
+                >
+                  Skip Intro ⤑
                 </button>
               </div>
             </div>
@@ -292,7 +451,11 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
       {/* ========================================================================= */}
       {/* 2. THE KINETIC DRAGGABLE RUNWAY (TLB Style Interactive Reel)              */}
       {/* ========================================================================= */}
-      <section className="relative w-full overflow-hidden bg-stone-950 text-stone-100 select-none pb-10 border-b border-white/10">
+      <section
+        ref={runwayRef}
+        tabIndex={-1}
+        className="relative w-full overflow-hidden bg-stone-950 text-stone-100 select-none pb-10 border-b border-white/10 focus:outline-none"
+      >
         {/* Floating inverting wordmark (mix-blend-difference) */}
         <div className="absolute top-10 left-1/2 -translate-x-1/2 z-20 pointer-events-none select-none mix-blend-difference text-white w-full max-w-6xl px-4 text-center">
           <div className="flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
@@ -331,16 +494,17 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
           </div>
 
           <div className="flex items-center gap-4 text-xs font-mono">
-            {/* Audio Toggle */}
+            {/* Audio Toggle (>= 44px min-height target) */}
             <button
               type="button"
               onClick={handleToggleSound}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xs border transition-colors cursor-pointer text-[11px] ${
+              className={`flex items-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-xs border transition-colors cursor-pointer text-[11px] focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:outline-none ${
                 soundEnabled
                   ? "border-emerald-600 bg-emerald-950/40 text-emerald-400"
                   : "border-stone-800 bg-stone-900 text-stone-500 hover:text-stone-300"
               }`}
               title="Toggle Procedural Audio"
+              aria-label={`Toggle Procedural Audio. Currently ${soundEnabled ? "on" : "off"}`}
             >
               <span
                 className={`w-1.5 h-1.5 rounded-full ${
@@ -350,25 +514,30 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
               <span>AUDIO: {soundEnabled ? "ON" : "OFF"}</span>
             </button>
 
-            {/* Replay Gate Trigger */}
+            {/* Replay Gate Trigger (>= 44px min-height target) */}
             <button
               type="button"
               onClick={handleReplayGate}
-              className="text-stone-400 hover:text-white transition-colors underline decoration-stone-700 underline-offset-4 cursor-pointer text-[11px] hidden md:inline"
+              className="text-stone-400 hover:text-white transition-colors underline decoration-stone-700 underline-offset-4 cursor-pointer text-[11px] hidden md:inline-flex items-center min-h-[44px] px-2 focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:outline-none"
             >
               Replay Gate ↺
             </button>
 
             <span className="text-stone-500 text-[11px] hidden sm:inline">
-              ← Drag or Swipe →
+              ← Drag, Swipe or Arrows →
             </span>
           </div>
         </div>
 
-        {/* The Draggable Horizontal Filmstrip */}
+        {/* The Draggable & Keyboard-Accessible Horizontal Filmstrip */}
         <div className="pt-24 md:pt-32 pb-4">
           <div
             ref={reelRef}
+            tabIndex={0}
+            role="region"
+            aria-label="Archival Research Reel. Use arrow keys or drag to navigate."
+            onKeyDown={handleReelKeyDown}
+            onScroll={updateProgress}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUpOrLeave}
@@ -376,11 +545,11 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
-            className={`flex gap-6 overflow-x-auto scrollbar-none px-4 sm:px-6 md:px-12 cursor-grab active:cursor-grabbing transition-transform ${
+            className={`flex gap-6 overflow-x-auto scrollbar-none px-4 sm:px-6 md:px-12 cursor-grab active:cursor-grabbing transition-transform focus-visible:ring-2 focus-visible:ring-stone-300 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 ${
               isGrabbing ? "cursor-grabbing" : ""
             }`}
             style={{
-              scrollBehavior: isDraggingRef.current ? "auto" : "smooth",
+              scrollBehavior: isDraggingRef.current || prefersReducedMotion ? "auto" : "smooth",
             }}
           >
             {slides.map((item) => (
@@ -419,6 +588,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
                         viewBox="0 0 320 60"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
                       >
                         <path
                           d="M10 50 L80 15 L160 35 L240 10 L310 40"
@@ -444,6 +614,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
                         viewBox="0 0 320 60"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
                       >
                         <path
                           d="M10 30 Q 90 -10, 160 30 T 310 30"
@@ -469,6 +640,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
                         viewBox="0 0 320 60"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
                       >
                         <rect x="20" y="10" width="40" height="40" fill="#27272a" stroke="#52525b" />
                         <rect x="70" y="10" width="40" height="40" fill="#fafafa" />
@@ -490,6 +662,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
                         viewBox="0 0 320 60"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
                       >
                         <line x1="20" y1="15" x2="300" y2="15" stroke="#3f3f46" strokeWidth="2" />
                         <line x1="20" y1="30" x2="240" y2="30" stroke="#71717a" strokeWidth="2" />
@@ -511,7 +684,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
                   </span>
                 </div>
 
-                {/* Card Bottom: Summary & Direct Links */}
+                {/* Card Bottom: Summary & Direct Links with Accessible Target Sizes */}
                 <div className="space-y-4">
                   <p className="text-stone-400 text-xs md:text-sm line-clamp-2 leading-relaxed">
                     {item.summary}
@@ -520,7 +693,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
                   <div className="flex items-center justify-between pt-3 border-t border-stone-800 text-xs font-mono">
                     <Link
                       href={item.href}
-                      className="text-stone-100 hover:text-white underline decoration-stone-600 underline-offset-4 transition-colors font-semibold flex items-center gap-1.5"
+                      className="text-stone-100 hover:text-white underline decoration-stone-600 underline-offset-4 transition-colors font-semibold flex items-center gap-1.5 min-h-[44px] py-2 focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:outline-none"
                     >
                       <span>{item.type === "SYSTEM" ? "View Spec" : "Read Text"}</span>
                       <span>→</span>
@@ -531,7 +704,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
                         href={item.codeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-stone-500 hover:text-stone-300 transition-colors"
+                        className="text-stone-500 hover:text-stone-300 transition-colors min-h-[44px] inline-flex items-center py-2 px-1 focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:outline-none"
                         onClick={(e) => e.stopPropagation()}
                       >
                         Source [gh] ↗
@@ -544,12 +717,20 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
           </div>
         </div>
 
-        {/* Bottom Filmstrip Calibrated Ruler (Scrub & Tick) */}
+        {/* Bottom Filmstrip Calibrated Ruler (Keyboard Accessible Slider & Scrubber) */}
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 mt-4 space-y-2">
           <div
+            role="slider"
+            tabIndex={0}
+            aria-label="Filmstrip timeline scrubber"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(scrollProgress * 100)}
+            aria-valuetext={`${Math.round(scrollProgress * 100)}% through archival reel`}
             onClick={handleRulerClick}
-            className="w-full h-8 bg-stone-900 border border-stone-800 rounded-xs flex items-center justify-between px-3 cursor-pointer relative overflow-hidden group hover:border-stone-600 transition-colors"
-            title="Click or drag to scrub filmstrip ruler"
+            onKeyDown={handleRulerKeyDown}
+            className="w-full h-11 bg-stone-900 border border-stone-800 rounded-xs flex items-center justify-between px-3 cursor-pointer relative overflow-hidden group hover:border-stone-600 focus-visible:ring-2 focus-visible:ring-stone-300 focus-visible:outline-none transition-colors"
+            title="Click, drag or use arrow keys to scrub filmstrip ruler"
           >
             {/* Ruler Ticks */}
             <div className="flex items-center justify-between w-full font-mono text-[9px] text-stone-600 select-none">
@@ -568,11 +749,11 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
           </div>
 
           <div className="flex justify-between items-center text-[10px] font-mono text-stone-500 uppercase tracking-widest pt-1">
-            <span>Ruler: 35mm // Frame Scrubber</span>
+            <span>Ruler: 35mm // Frame Scrubber (Slider)</span>
             <a
               href="#timeline"
               onClick={scrollToTimeline}
-              className="text-stone-400 hover:text-white underline decoration-stone-700 underline-offset-4 transition-colors flex items-center gap-1"
+              className="text-stone-400 hover:text-white underline decoration-stone-700 underline-offset-4 transition-colors flex items-center gap-1 min-h-[44px] py-2 focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:outline-none"
             >
               <span>Explore Archival Timeline</span>
               <span>↓</span>
