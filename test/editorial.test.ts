@@ -4,7 +4,6 @@ import {
   SiteConfigSchema,
   ArticleFrontmatterSchema,
   ProjectFrontmatterSchema,
-  QuoteSchema,
 } from "../src/lib/types";
 import {
   calculateReadingTime,
@@ -16,7 +15,6 @@ import {
   getArticleBySlug,
   getAllProjects,
   getProjectBySlug,
-  getAllQuotes,
   getAllTags,
   getItemsByTag,
 } from "../src/lib/content";
@@ -25,7 +23,7 @@ import { generateRssFeed } from "../src/lib/rss";
 describe("1. Zod Schema Validation & Fallbacks", () => {
   it("SiteConfigSchema should provide robust defaults when empty object is passed", () => {
     const config = SiteConfigSchema.parse({});
-    assert.equal(config.siteTitle, "Shaik Umran — Research & Engineering Journal");
+    assert.equal(config.siteTitle, "Shaik Umran — AI Research Lab Journal");
     assert.equal(config.authorName, "Shaik Umran");
     assert.equal(typeof config.bio, "string");
     assert.ok(config.bio.length > 0);
@@ -108,17 +106,6 @@ describe("1. Zod Schema Validation & Fallbacks", () => {
     assert.equal(parsed.techStack.length, 3);
   });
 
-  it("QuoteSchema should validate aphorisms correctly", () => {
-    const validQuote = {
-      id: "test-quote",
-      quote: "Premature optimization is the root of all evil.",
-      author: "Donald Knuth",
-      source: "Structured Programming",
-      category: "Computing",
-    };
-    const parsed = QuoteSchema.parse(validQuote);
-    assert.equal(parsed.author, "Donald Knuth");
-  });
 });
 
 describe("2. Markdown Engine & Shiki Syntax Highlighting", () => {
@@ -226,7 +213,7 @@ describe("3. Content & Taxonomy Queries", () => {
   it("getArticleBySlug should return article with rendered content, or null if non-existent", async () => {
     const article = await getArticleBySlug("inside-uniqtoken-tokenizer-architecture");
     assert.ok(article !== null, "Article should exist");
-    assert.ok(article.contentHtml && article.contentHtml.includes("Byte-Pair Encoding"), "Should contain parsed code");
+    assert.ok(article.contentHtml && article.contentHtml.includes("CustomTokenizer"), "Should contain parsed code");
 
     const nonExistent = await getArticleBySlug("phantom-article-does-not-exist");
     assert.equal(nonExistent, null, "Non-existent slug should return null");
@@ -252,11 +239,6 @@ describe("3. Content & Taxonomy Queries", () => {
     assert.equal(nonExistent, null);
   });
 
-  it("getAllQuotes should return curated aphorisms", () => {
-    const quotes = getAllQuotes();
-    assert.ok(quotes.length >= 3, `Expected at least 3 quotes, got ${quotes.length}`);
-    assert.ok(quotes.some((q) => q.author.includes("Dijkstra")));
-  });
 
   it("getAllTags should aggregate tags across articles and projects with correct counts", () => {
     const tags = getAllTags();
