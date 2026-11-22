@@ -1,6 +1,7 @@
 ---
 title: "Concept Ablation in Diffusion Language Models"
 date: "2026-09-14"
+coverImage: "/images/articles/diffusion-ablation.svg"
 excerpt: "Quantifying orthogonal concept erasure, continuous representation steering, and generative entropy across denoising trajectories."
 tags:
   - "diffusion"

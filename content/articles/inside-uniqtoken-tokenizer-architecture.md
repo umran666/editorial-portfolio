@@ -1,6 +1,7 @@
 ---
 title: "Inside UniqToken: Building a High-Throughput Tokenizer from Scratch"
 date: "2026-10-28"
+coverImage: "/images/articles/uniqtoken.svg"
 excerpt: "A deep dive into Byte-Pair Encoding, Unigram pruning, byte-fallback mechanisms, and Unicode normalization trade-offs in modern LLM vocabularies."
 tags:
   - "tokenization"

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Diffusion language model concept ablation cover</title>
+  <desc id="desc">A monochrome denoising trajectory diagram moving from noise toward a separated concept representation.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0b0d"/>
+      <stop offset="1" stop-color="#191b1d"/>
+    </linearGradient>
+    <pattern id="grain" width="22" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="5" r="1" fill="#5d6266" opacity=".3"/><circle cx="16" cy="14" r="1" fill="#5d6266" opacity=".22"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grain)"/>
+  <text x="72" y="94" fill="#8f9598" font-family="monospace" font-size="14" letter-spacing="3">DIFFUSIONGEMMA // MODEL BEHAVIOR</text>
+  <text x="1128" y="94" text-anchor="end" fill="#777d80" font-family="monospace" font-size="13" letter-spacing="2">CONCEPT ABLATION</text>
+  <g transform="translate(80 170)" fill="none">
+    <path d="M20 120 C145 16 250 224 380 120 S620 16 750 120 S960 224 1060 120" stroke="#777d80" stroke-width="2" stroke-dasharray="2 11"/>
+    <path d="M20 120 C145 224 250 16 380 120 S620 224 750 120 S960 16 1060 120" stroke="#d7d6d1" stroke-width="2" opacity=".72"/>
+    <path d="M20 120 C145 16 250 224 380 120 S620 16 750 120 S960 224 1060 120" stroke="#3d4448" stroke-width="1"/>
+    <circle cx="20" cy="120" r="8" fill="#858b8e" stroke="none"/>
+    <circle cx="380" cy="120" r="8" fill="#f2f0eb" stroke="none"/>
+    <circle cx="750" cy="120" r="8" fill="#f2f0eb" stroke="none"/>
+    <circle cx="1060" cy="120" r="8" fill="#19b77a" stroke="none"/>
+  </g>
+  <g font-family="monospace" font-size="13" letter-spacing="1">
+    <text x="96" y="334" fill="#9aa0a3">NOISE</text>
+    <text x="432" y="334" fill="#f2f0eb">LATENT STATE</text>
+    <text x="800" y="334" fill="#f2f0eb">ABLATION VECTOR</text>
+    <text x="1080" y="334" text-anchor="end" fill="#19b77a">CONCEPT</text>
+  </g>
+  <text x="80" y="468" fill="#f2f0eb" font-family="Arial, sans-serif" font-size="54" font-weight="700" letter-spacing="1">FROM NOISE TO CONCEPT</text>
+  <text x="82" y="516" fill="#9ba0a3" font-family="monospace" font-size="16" letter-spacing="3">DENOISING / STEERING / ENTROPY</text>
+  <path d="M80 558H1120" stroke="#565b5e"/>
+  <text x="1120" y="592" text-anchor="end" fill="#757b7e" font-family="monospace" font-size="12" letter-spacing="2">CONCEPT ABLATION // 02</text>
+</svg>

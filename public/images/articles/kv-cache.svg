@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">KV-cache compaction and inference economics cover</title>
+  <desc id="desc">A dark systems diagram showing key-value cache lanes being compacted as sequence length grows.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#090a0c"/>
+      <stop offset="1" stop-color="#181a1d"/>
+    </linearGradient>
+    <pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse">
+      <path d="M26 0H0V26" fill="none" stroke="#303438" stroke-width="1" opacity=".5"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="54" y="54" width="1092" height="522" fill="url(#grid)" opacity=".65"/>
+  <text x="78" y="98" fill="#8f9598" font-family="monospace" font-size="14" letter-spacing="3">UNIQKACHE // INFERENCE ECONOMICS</text>
+  <text x="1120" y="98" text-anchor="end" fill="#19b77a" font-family="monospace" font-size="13" letter-spacing="2">CACHE COMPACTION</text>
+  <g transform="translate(86 158)">
+    <text x="0" y="0" fill="#9ba0a3" font-family="monospace" font-size="13" letter-spacing="2">KEY / VALUE LANES</text>
+    <g transform="translate(0 40)">
+      <text x="0" y="30" fill="#777d80" font-family="monospace" font-size="12">K</text>
+      <text x="0" y="98" fill="#777d80" font-family="monospace" font-size="12">V</text>
+      <g fill="#3f4549"><rect x="38" y="10" width="74" height="40"/><rect x="122" y="10" width="74" height="40"/><rect x="206" y="10" width="74" height="40"/><rect x="290" y="10" width="74" height="40"/><rect x="374" y="10" width="74" height="40"/><rect x="458" y="10" width="74" height="40"/></g>
+      <g fill="#757b7e"><rect x="38" y="78" width="74" height="40"/><rect x="122" y="78" width="74" height="40"/><rect x="206" y="78" width="74" height="40"/><rect x="290" y="78" width="74" height="40"/><rect x="374" y="78" width="74" height="40"/><rect x="458" y="78" width="74" height="40"/></g>
+      <path d="M582 28H842" stroke="#19b77a" stroke-width="2"/><path d="M582 96H842" stroke="#19b77a" stroke-width="2"/>
+      <text x="600" y="12" fill="#19b77a" font-family="monospace" font-size="12">READ / ATTEND</text>
+      <text x="600" y="112" fill="#19b77a" font-family="monospace" font-size="12">COMPACT / RETAIN</text>
+      <path d="M854 28l24 0M854 96l24 0" stroke="#19b77a" stroke-width="2"/>
+      <path d="m872 20 10 8-10 8M872 88l10 8-10 8" fill="none" stroke="#19b77a" stroke-width="2"/>
+    </g>
+  </g>
+  <text x="82" y="462" fill="#f2f0eb" font-family="Arial, sans-serif" font-size="44" font-weight="700" letter-spacing="1">THE MEMORY BANDWIDTH TRAP</text>
+  <text x="84" y="510" fill="#9ba0a3" font-family="monospace" font-size="16" letter-spacing="3">LONG CONTEXT / DYNAMIC RETENTION / GPU VRAM</text>
+  <path d="M82 558H1118" stroke="#565b5e"/>
+  <text x="1118" y="592" text-anchor="end" fill="#757b7e" font-family="monospace" font-size="12" letter-spacing="2">KV-CACHE PRUNING // 03</text>
+</svg>
