@@ -1,6 +1,7 @@
 ---
 title: "Inference Economics: Taming the KV-Cache Bottleneck"
 date: "2026-08-04"
+coverImage: "/images/articles/kv-cache.svg"
 excerpt: "Why memory bandwidth dictates modern transformer scaling, and how dynamic attention sink heuristics reclaim GPU VRAM without perplexity spikes."
 tags:
   - "kv-cache"
