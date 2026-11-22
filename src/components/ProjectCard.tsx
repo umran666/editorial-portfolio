@@ -54,7 +54,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           href={`/projects/${project.slug}`}
           className="text-stone-200 hover:text-white uppercase tracking-wider hover:underline decoration-stone-500 underline-offset-4 font-semibold"
         >
-          View System Spec →
+          Open project →
         </Link>
 
         <div className="flex items-center gap-4">

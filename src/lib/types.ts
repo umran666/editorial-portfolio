@@ -4,8 +4,6 @@ export const SocialLinksSchema = z.object({
   github: z.string().url().optional().catch(undefined),
   huggingface: z.string().url().optional().catch(undefined),
   linkedin: z.string().url().optional().catch(undefined),
-  twitter: z.string().url().optional().catch(undefined),
-  portfolio: z.string().url().optional().catch(undefined),
   rss: z.string().default("/rss.xml").catch("/rss.xml"),
 });
 
@@ -19,12 +17,12 @@ export const ExperienceItemSchema = z.object({
 export const SiteConfigSchema = z.object({
   siteTitle: z
     .string()
-    .default("Shaik Umran — Research & Engineering Journal")
-    .catch("Shaik Umran — Research & Engineering Journal"),
+    .default("Shaik Umran — AI Research Lab Journal")
+    .catch("Shaik Umran — AI Research Lab Journal"),
   siteSubtitle: z
     .string()
-    .default("Language Models, Tokenizer Architectures & Diffusion Research")
-    .catch("Language Models, Tokenizer Architectures & Diffusion Research"),
+    .default("Tokenization, inference memory, and model behavior")
+    .catch("Tokenization, inference memory, and model behavior"),
   authorName: z.string().default("Shaik Umran").catch("Shaik Umran"),
   authorRole: z
     .string()
@@ -33,10 +31,10 @@ export const SiteConfigSchema = z.object({
   bio: z
     .string()
     .default(
-      "Independent AI/ML researcher and computer science engineer exploring language models, tokenizer architectures, diffusion models, and efficient AI systems."
+      "I study AI systems by opening up the layers that are easy to hide: how text becomes tokens, how inference memory grows, and what changes when a model is intervened on."
     )
     .catch(
-      "Independent AI/ML researcher and computer science engineer exploring language models, tokenizer architectures, diffusion models, and efficient AI systems."
+      "I study AI systems by opening up the layers that are easy to hide: how text becomes tokens, how inference memory grows, and what changes when a model is intervened on."
     ),
   email: z.string().email().default("shaikumran487@gmail.com").catch("shaikumran487@gmail.com"),
   avatarUrl: z.string().default("/images/avatar.jpg").catch("/images/avatar.jpg"),
@@ -92,17 +90,6 @@ export interface Project extends ProjectFrontmatter {
   content: string;
   contentHtml?: string;
 }
-
-export const QuoteSchema = z.object({
-  id: z.string(),
-  quote: z.string(),
-  author: z.string(),
-  source: z.string().optional(),
-  date: z.string().optional(),
-  category: z.string().default("Philosophy"),
-});
-
-export type Quote = z.infer<typeof QuoteSchema>;
 
 export interface TagCount {
   name: string;

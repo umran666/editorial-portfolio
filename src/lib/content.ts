@@ -5,11 +5,9 @@ import {
   SiteConfigSchema,
   ArticleFrontmatterSchema,
   ProjectFrontmatterSchema,
-  QuoteSchema,
   type SiteConfig,
   type Article,
   type Project,
-  type Quote,
   type TagCount,
 } from "./types";
 import { calculateReadingTime, renderMarkdown } from "./markdown";
@@ -18,7 +16,6 @@ const CONTENT_DIR = path.join(process.cwd(), "content");
 const ARTICLES_DIR = path.join(CONTENT_DIR, "articles");
 const PROJECTS_DIR = path.join(CONTENT_DIR, "projects");
 const ABOUT_FILE = path.join(CONTENT_DIR, "about.md");
-const QUOTES_FILE = path.join(CONTENT_DIR, "quotes.json");
 
 /**
  * Reads global site configuration and author profile from content/about.md
@@ -50,7 +47,7 @@ export async function getSiteConfig(): Promise<{
   // Fallback defaults
   const defaultConfig = SiteConfigSchema.parse({});
   const fallbackMarkdown =
-    "Systems engineer, distributed architect, and technical essayist.";
+    "Independent AI/ML researcher keeping notes on tokenization, inference memory, and model behavior.";
   return {
     config: defaultConfig,
     content: fallbackMarkdown,
@@ -167,30 +164,6 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     ...project,
     contentHtml,
   };
-}
-
-/**
- * Retrieves all quotes.
- */
-export function getAllQuotes(): Quote[] {
-  if (!fs.existsSync(QUOTES_FILE)) return [];
-
-  try {
-    const raw = fs.readFileSync(QUOTES_FILE, "utf8");
-    const data = JSON.parse(raw);
-    if (Array.isArray(data)) {
-      return data
-        .map((item) => {
-          const parsed = QuoteSchema.safeParse(item);
-          return parsed.success ? parsed.data : null;
-        })
-        .filter((q): q is Quote => q !== null);
-    }
-  } catch (error) {
-    console.error("Error reading quotes.json:", error);
-  }
-
-  return [];
 }
 
 /**

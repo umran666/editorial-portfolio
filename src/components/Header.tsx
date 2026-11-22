@@ -13,12 +13,11 @@ export function Header({ siteTitle = "Shaik Umran" }: HeaderProps) {
   const pathname = usePathname();
 
   const navLinks = [
-    { href: "/", label: "Archive" },
-    { href: "/#timeline", label: "Timeline" },
-    { href: "/articles", label: "Writing" },
-    { href: "/projects", label: "Systems" },
+    { href: "/", label: "Journal" },
+    { href: "/#timeline", label: "Lab Log" },
+    { href: "/articles", label: "Notes" },
+    { href: "/projects", label: "Projects" },
     { href: "/about", label: "About" },
-    { href: "/quotes", label: "Axioms" },
     { href: "/tags", label: "Index" },
   ];
 
@@ -31,37 +30,33 @@ export function Header({ siteTitle = "Shaik Umran" }: HeaderProps) {
   const brandName = siteTitle.includes("—") ? siteTitle.split("—")[0].trim() : siteTitle;
 
   return (
-    <div className="w-full border-b border-white/10 bg-stone-950/80 backdrop-blur-md sticky top-0 z-50">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
-        <header className="py-4 md:py-5 flex justify-between items-center gap-4">
-          {/* Brand Wordmark & Monospace Tag */}
-          <div className="flex items-center gap-3 shrink-0">
-            <Link
-              href="/"
-              className="group flex items-center gap-2.5 transition-opacity hover:opacity-90 whitespace-nowrap"
-              title={siteTitle}
-            >
-              <span className="font-geist font-black text-base sm:text-lg lg:text-xl tracking-tight text-stone-100 uppercase whitespace-nowrap leading-none">
-                {brandName}
-              </span>
-              <span className="font-mono text-[10px] tracking-widest uppercase text-stone-500 border border-stone-800 px-2 py-0.5 rounded-xs whitespace-nowrap leading-none group-hover:text-stone-300 group-hover:border-stone-700 transition-colors">
-                Journal // 2026
-              </span>
-            </Link>
-          </div>
+    <div className="sticky top-0 z-50 w-full border-b border-white/10 bg-stone-950/85 backdrop-blur-md">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 md:px-8 lg:px-12">
+        <header className="flex items-center justify-between gap-4 py-4 md:py-5">
+          <Link
+            href="/"
+            className="group flex shrink-0 items-center gap-2.5 whitespace-nowrap transition-opacity hover:opacity-90"
+            title={siteTitle}
+          >
+            <span className="font-geist text-base font-black uppercase leading-none tracking-tight text-stone-100 sm:text-lg lg:text-xl">
+              {brandName}
+            </span>
+            <span className="rounded-xs border border-stone-800 px-2 py-0.5 font-mono text-[10px] uppercase leading-none tracking-widest text-stone-500 transition-colors group-hover:border-stone-700 group-hover:text-stone-300">
+              AI Lab // Journal
+            </span>
+          </Link>
 
-          {/* Desktop Nav - Minimalist, Monochromatic, JetBrains Mono & Inter */}
           <nav
-            className="hidden md:flex items-center gap-x-3.5 sm:gap-x-4 lg:gap-x-7 text-xs font-mono uppercase tracking-wider shrink-0"
+            className="hidden shrink-0 items-center gap-x-4 font-mono text-xs uppercase tracking-wider md:flex lg:gap-x-7"
             aria-label="Main Navigation"
           >
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`transition-colors py-1 whitespace-nowrap ${
+                className={`whitespace-nowrap py-1 transition-colors ${
                   isActive(link.href)
-                    ? "text-stone-100 font-semibold border-b-2 border-stone-100"
+                    ? "border-b-2 border-stone-100 font-semibold text-stone-100"
                     : "text-stone-400 hover:text-stone-100"
                 }`}
               >
@@ -70,58 +65,33 @@ export function Header({ siteTitle = "Shaik Umran" }: HeaderProps) {
             ))}
           </nav>
 
-          {/* Right Action: RSS & System Status */}
-          <div className="flex items-center gap-4 shrink-0">
-            <div className="hidden xl:flex items-center gap-2 text-[11px] font-mono text-stone-500 whitespace-nowrap">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>ONLINE</span>
-            </div>
-
+          <div className="flex shrink-0 items-center gap-3">
+            <span className="hidden font-mono text-[10px] uppercase tracking-widest text-stone-600 xl:inline">
+              Public research log
+            </span>
             <Link
               href="/rss.xml"
               target="_blank"
-              title="Subscribe to Research RSS Feed"
-              className="text-stone-400 hover:text-stone-100 transition-colors flex items-center gap-1.5 text-xs font-mono border border-stone-800 hover:border-stone-600 px-2.5 py-1 rounded-xs whitespace-nowrap"
+              title="Subscribe to the research journal RSS feed"
+              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-xs border border-stone-800 px-2.5 py-1 font-mono text-xs text-stone-400 transition-colors hover:border-stone-600 hover:text-stone-100"
               aria-label="Subscribe via RSS"
               rel="noopener"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M4 11a9 9 0 0 1 9 9" />
                 <path d="M4 4a16 16 0 0 1 16 16" />
                 <circle cx="5" cy="19" r="1" />
               </svg>
               <span className="hidden sm:inline">RSS</span>
             </Link>
-
-            {/* Mobile / Tablet Menu Toggle Button */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden text-stone-300 hover:text-white transition-colors p-1"
+              className="p-2 text-stone-300 transition-colors hover:text-white md:hidden"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileMenuOpen}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 {mobileMenuOpen ? (
                   <>
                     <line x1="18" y1="6" x2="6" y2="18" />
@@ -139,21 +109,16 @@ export function Header({ siteTitle = "Shaik Umran" }: HeaderProps) {
           </div>
         </header>
 
-        {/* Mobile / Tablet Menu Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-stone-800 mb-2 flex flex-col gap-3 font-mono text-xs uppercase tracking-wider">
-            <p className="text-[10px] text-stone-500 font-semibold mb-1">
-              Navigation Index
-            </p>
+          <div className="flex flex-col gap-3 border-t border-stone-800 py-4 font-mono text-xs uppercase tracking-wider md:hidden">
+            <p className="mb-1 text-[10px] font-semibold text-stone-500">Journal index</p>
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`py-1.5 transition-colors ${
-                  isActive(link.href)
-                    ? "text-stone-100 font-bold"
-                    : "text-stone-400 hover:text-stone-100"
+                  isActive(link.href) ? "font-bold text-stone-100" : "text-stone-400 hover:text-stone-100"
                 }`}
               >
                 {link.label}

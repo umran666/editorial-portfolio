@@ -36,7 +36,7 @@ export function Footer({ config }: FooterProps) {
         {/* Elsewhere Social Coordinates */}
         <div className="mt-8">
           <p className="text-xs font-mono font-semibold uppercase tracking-[0.24em] text-stone-500">
-            Coordinates & Networks
+            Research links
           </p>
           <div className="mt-4 flex flex-wrap items-center justify-center gap-3 font-mono text-xs">
             {config.social.github && (
@@ -93,49 +93,6 @@ export function Footer({ config }: FooterProps) {
               </a>
             )}
 
-            {config.social.twitter && (
-              <a
-                href={config.social.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xs border border-stone-800 bg-stone-900/60 px-3.5 py-1.5 font-medium text-stone-300 transition-all hover:border-stone-500 hover:bg-stone-850 hover:text-white"
-              >
-                <svg
-                  className="h-3 w-3"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-                X / Twitter
-              </a>
-            )}
-
-            {config.social.portfolio && (
-              <a
-                href={config.social.portfolio}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xs border border-stone-800 bg-stone-900/60 px-3.5 py-1.5 font-medium text-stone-300 transition-all hover:border-stone-500 hover:bg-stone-850 hover:text-white"
-              >
-                <svg
-                  className="h-3 w-3"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="2" y1="12" x2="22" y2="12" />
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                </svg>
-                Portfolio
-              </a>
-            )}
-
             <Link
               href={config.social.rss || "/rss.xml"}
               target="_blank"
@@ -184,14 +141,14 @@ export function Footer({ config }: FooterProps) {
               href="/about"
               className="underline decoration-stone-700 underline-offset-4 hover:text-stone-200 transition-colors"
             >
-              About & Credentials
+              About the researcher
             </Link>
             <span className="text-stone-700">·</span>
             <Link
               href="/tags"
               className="underline decoration-stone-700 underline-offset-4 hover:text-stone-200 transition-colors"
             >
-              Taxonomy Index
+              Research index
             </Link>
           </div>
         </div>
