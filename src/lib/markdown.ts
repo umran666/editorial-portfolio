@@ -96,17 +96,52 @@ export async function renderMarkdown(content: string): Promise<string> {
           </div>
         `;
       },
+      html({ text }) {
+        return escapeHtml(text);
+      },
+
       link({ href, title, text }) {
-        const isExternal = href.startsWith("http://") || href.startsWith("https://");
-        const rel = isExternal ? 'rel="noopener noreferrer" target="_blank"' : "";
-        const titleAttr = title ? `title="${title}"` : "";
-        return `<a href="${href}" ${rel} ${titleAttr} class="text-stone-100 underline decoration-stone-600 underline-offset-4 hover:decoration-stone-200 transition-colors">${text}</a>`;
+        const safeHref = sanitizeHref(href);
+        if (!safeHref) return text;
+
+        const isExternal = /^https?:\/\//i.test(safeHref);
+        const rel = isExternal ? ' rel="noopener noreferrer"' : "";
+        const target = isExternal ? ' target="_blank"' : "";
+        const titleAttr = title
+          ? ` title="${escapeHtml(title)}"`
+          : "";
+
+        return `<a href="${escapeHtml(safeHref)}"${rel}${target}${titleAttr} class="text-stone-100 underline decoration-stone-600 underline-offset-4 hover:decoration-stone-200 transition-colors">${text}</a>`;
       },
     },
   });
 
   const parsed = await customMarked.parse(content);
   return parsed;
+}
+
+function sanitizeHref(href: string): string | null {
+  const value = href.trim();
+  if (!value || value.startsWith("//")) return null;
+
+  if (
+    value.startsWith("/") ||
+    value.startsWith("#") ||
+    value.startsWith("?") ||
+    value.startsWith("./") ||
+    value.startsWith("../")
+  ) {
+    return value;
+  }
+
+  try {
+    const url = new URL(value, "https://shaikumran.dev");
+    return ["http:", "https:", "mailto:", "tel:"].includes(url.protocol)
+      ? value
+      : null;
+  } catch {
+    return null;
+  }
 }
 
 function escapeHtml(str: string): string {
