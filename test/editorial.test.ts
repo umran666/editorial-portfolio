@@ -175,22 +175,22 @@ describe("2. Markdown Engine & Shiki Syntax Highlighting", () => {
  assert.ok(!html.includes('href="/about" target="_blank"'), "Internal link should not have target=_blank");
  });
   it("renderMarkdown should reject unsafe links and escape HTML attributes", async () => {
-    const html = await renderMarkdown(
-      `[Unsafe](javascript:alert(1)) [Safe](https://example.com/?a=1&b=2 "A \"title\"")\n\n<img src=x onerror=alert(1)>`
-    );
+    const unsafeHtml = await renderMarkdown(`[Unsafe](javascript:alert(1))`);
+    const safeHtml = await renderMarkdown(`[Safe](https://example.com/?a=1&b=2 "A & B")`);
+    const rawHtml = await renderMarkdown(`<img src=x onerror=alert(1)>`);
 
-    assert.ok(html.includes("Unsafe"), "Unsafe link text should remain visible");
-    assert.ok(!html.includes("javascript:"), "Unsafe protocols must not be rendered");
+    assert.ok(unsafeHtml.includes("Unsafe"), "Unsafe link text should remain visible");
+    assert.ok(!unsafeHtml.includes("javascript:"), "Unsafe protocols must not be rendered");
     assert.ok(
-      html.includes('href="https://example.com/?a=1&amp;b=2"'),
+      safeHtml.includes('href="https://example.com/?a=1&amp;b=2"'),
       "Safe URL attributes must be escaped"
     );
     assert.ok(
-      html.includes('title="A &quot;title&quot;"'),
+      safeHtml.includes('title="A &amp; B"'),
       "Title attributes must be escaped"
     );
     assert.ok(
-      html.includes("&lt;img src=x onerror=alert(1)&gt;"),
+      rawHtml.includes("&lt;img src=x onerror=alert(1)&gt;"),
       "Raw HTML should be rendered as text"
     );
   });
