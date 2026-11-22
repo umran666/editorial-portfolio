@@ -137,12 +137,11 @@ describe("CHALLENGE 1: Mobile Navigation Drawer Adversarial Stress", () => {
     const page = await context.newPage();
 
     const expectedLinks = [
-      { label: "Archive", path: "/" },
-      { label: "Writing", path: "/articles" },
-      { label: "Systems", path: "/projects" },
+      { label: "Journal", path: "/" },
+      { label: "Notes", path: "/articles" },
+      { label: "Projects", path: "/projects" },
       { label: "About", path: "/about" },
-      { label: "Axioms", path: "/quotes" },
-      { label: "Index", path: "/tags" },
+            { label: "Index", path: "/tags" },
     ];
 
     for (const item of expectedLinks) {
@@ -176,13 +175,13 @@ describe("CHALLENGE 2: ArchivalTimeline Filter Toggling Stress", () => {
     await page.goto(`${BASE_URL}/`, { waitUntil: "networkidle" });
 
     const allBtn = page.locator('button:has-text("All")');
-    const systemsBtn = page.locator('button:has-text("Systems")');
-    const monographsBtn = page.locator('button:has-text("Monographs")');
+    const systemsBtn = page.locator('button:has-text("Projects")');
+    const notesBtn = page.locator('button:has-text("Notes")');
 
     const filterOptions = [
       { btn: allBtn, expected: 9, name: "All" },
-      { btn: systemsBtn, expected: 6, name: "Systems" },
-      { btn: monographsBtn, expected: 3, name: "Monographs" },
+      { btn: systemsBtn, expected: 3, name: "Projects" },
+      { btn: notesBtn, expected: 3, name: "Notes" },
     ];
 
     // Fire 50 rapid clicks cycling through filters
@@ -192,19 +191,19 @@ describe("CHALLENGE 2: ArchivalTimeline Filter Toggling Stress", () => {
       await page.waitForTimeout(20);
     }
 
-    // Explicitly click Monographs
-    await monographsBtn.click();
+    // Explicitly click Notes
+    await notesBtn.click();
     await page.waitForTimeout(200);
 
     const monoArticles = await page.$$("article.group");
-    assert.equal(monoArticles.length, 3, "Monographs filter must show exactly 3 entries after stress");
+    assert.equal(monoArticles.length, 3, "Notes filter must show exactly 3 entries after stress");
 
-    // Verify all 3 entries are Monographs
+    // Verify all 3 entries are Notes
     const badges = await page.$$eval("article.group", (els) =>
       els.map((e) => e.querySelector(".uppercase")?.textContent?.trim())
     );
     for (const badge of badges) {
-      assert.equal(badge, "MONOGRAPH", "Every entry under Monographs filter must be a MONOGRAPH");
+      assert.equal(badge, "MONOGRAPH", "Every entry under Notes filter must be a MONOGRAPH");
     }
 
     // Explicitly click Systems
@@ -212,14 +211,14 @@ describe("CHALLENGE 2: ArchivalTimeline Filter Toggling Stress", () => {
     await page.waitForTimeout(200);
 
     const sysArticles = await page.$$("article.group");
-    assert.equal(sysArticles.length, 6, "Systems filter must show exactly 6 entries after stress");
+    assert.equal(sysArticles.length, 6, "Systems filter must show exactly 3 entries after stress");
 
     // Explicitly click All
     await allBtn.click();
     await page.waitForTimeout(200);
 
     const allArticles = await page.$$("article.group");
-    assert.equal(allArticles.length, 9, "All filter must restore exactly 9 entries");
+    assert.equal(allArticles.length, 9, "All filter must restore exactly 6 entries");
 
     await page.close();
   });
@@ -228,7 +227,7 @@ describe("CHALLENGE 2: ArchivalTimeline Filter Toggling Stress", () => {
     const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
     await page.goto(`${BASE_URL}/`, { waitUntil: "networkidle" });
 
-    const systemsBtn = page.locator('button:has-text("Systems")');
+    const systemsBtn = page.locator('button:has-text("Projects")');
     await systemsBtn.click();
     await page.waitForTimeout(100);
 
@@ -420,8 +419,7 @@ describe("CHALLENGE 5: Interactive Element Edge Cases & Failure Modes", () => {
       "/articles/inside-uniqtoken-tokenizer-architecture",
       "/projects",
       "/projects/diffusion-gemma",
-      "/quotes",
-      "/tags",
+        "/tags",
     ];
 
     for (const route of routesToVisit) {

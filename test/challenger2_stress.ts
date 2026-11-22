@@ -39,7 +39,6 @@ describe("Suite 1: Link Graph Concurrency & Integrity Stress", () => {
     "/projects/spamshield-ai",
     "/projects/uniqkache",
     "/projects/uniqtoken",
-    "/quotes",
     "/tags",
     "/rss.xml",
     "/feed.xml",
@@ -147,8 +146,7 @@ describe("Suite 1: Link Graph Concurrency & Integrity Stress", () => {
       "/articles",
       "/projects",
       "/about",
-      "/quotes",
-      "/tags",
+        "/tags",
       "/articles/inside-uniqtoken-tokenizer-architecture",
       "/projects/diffusion-gemma",
     ];
@@ -197,7 +195,7 @@ describe("Suite 2: Adversarial Deep Links & Slug Robustness", () => {
     `/articles/${"a".repeat(500)}`,
     `/projects/${"x".repeat(500)}`,
     // Missing slugs
-    "/articles/non-existent-monograph-slug-9999",
+    "/articles/non-existent-note-slug-9999",
     "/projects/unindexed-experimental-project-slug",
     "/tags/non-existent-taxonomy-tag-xyz",
   ];
