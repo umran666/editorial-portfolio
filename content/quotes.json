@@ -1,0 +1,50 @@
+[
+  {
+    "id": "sutton-bitter-lesson",
+    "quote": "The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective, and by a large margin.",
+    "author": "Richard Sutton",
+    "source": "The Bitter Lesson",
+    "date": "2019",
+    "category": "Artificial Intelligence"
+  },
+  {
+    "id": "shannon-information",
+    "quote": "The fundamental problem of communication is that of reproducing at one point either exactly or approximately a message selected at another point.",
+    "author": "Claude Shannon",
+    "source": "A Mathematical Theory of Communication",
+    "date": "1948",
+    "category": "Information Theory"
+  },
+  {
+    "id": "dijkstra-simplicity",
+    "quote": "Simplicity is a great virtue but it requires hard work to achieve it and education to appreciate it. And to make matters worse: complexity sells better.",
+    "author": "Edsger W. Dijkstra",
+    "source": "EWD896",
+    "date": "1984",
+    "category": "Computing"
+  },
+  {
+    "id": "turing-thinking",
+    "quote": "We can only see a short distance ahead, but we can see plenty there that needs to be done.",
+    "author": "Alan Turing",
+    "source": "Computing Machinery and Intelligence",
+    "date": "1950",
+    "category": "Computing"
+  },
+  {
+    "id": "simone-weil-attention",
+    "quote": "Attention, taken to its highest degree, is the same thing as prayer. It presupposes faith and love. Absolutely unmixed attention is prayer.",
+    "author": "Simone Weil",
+    "source": "Gravity and Grace",
+    "date": "1947",
+    "category": "Philosophy"
+  },
+  {
+    "id": "alan-kay-perspective",
+    "quote": "A change in perspective is worth 80 IQ points.",
+    "author": "Alan Kay",
+    "source": "Computing Perspectives",
+    "date": "1989",
+    "category": "Computing"
+  }
+]

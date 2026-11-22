@@ -1,0 +1,213 @@
+@import "tailwindcss";
+
+@theme {
+  --font-geist: var(--font-geist), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: var(--font-inter), Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
+}
+
+:root {
+  --background: #09090b; /* stark obsidian / zinc-950 */
+  --foreground: #fafafa; /* pure white */
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), Inter, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Typography Utilities */
+.font-geist {
+  font-family: var(--font-geist), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.font-sans {
+  font-family: var(--font-inter), Inter, sans-serif;
+}
+
+.font-mono {
+  font-family: var(--font-mono), "JetBrains Mono", monospace;
+}
+
+/* Entrance Animations */
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-fade {
+  animation: heroFadeIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-hero-fade-delay-1 {
+  animation: heroFadeIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.12s forwards;
+  opacity: 0;
+}
+
+.animate-hero-fade-delay-2 {
+  animation: heroFadeIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.24s forwards;
+  opacity: 0;
+}
+
+.animate-hero-fade-delay-3 {
+  animation: heroFadeIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.36s forwards;
+  opacity: 0;
+}
+
+/* Monochromatic Editorial Prose Styling */
+.editorial-prose {
+  color: #d4d4d8; /* zinc-300 */
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.85;
+}
+
+.editorial-prose p {
+  margin-bottom: 1.5rem;
+}
+
+.editorial-prose h1,
+.editorial-prose h2,
+.editorial-prose h3,
+.editorial-prose h4 {
+  color: #fafafa;
+  font-family: var(--font-geist), -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-top: 2.25rem;
+  margin-bottom: 1rem;
+}
+
+.editorial-prose h1 {
+  font-size: 2.25rem;
+  line-height: 1.2;
+}
+
+.editorial-prose h2 {
+  font-size: 1.65rem;
+  line-height: 1.3;
+  border-bottom: 1px solid #27272a;
+  padding-bottom: 0.5rem;
+}
+
+.editorial-prose h3 {
+  font-size: 1.35rem;
+  line-height: 1.4;
+}
+
+.editorial-prose a {
+  color: #fafafa;
+  text-decoration: underline;
+  text-decoration-color: #52525b;
+  text-underline-offset: 4px;
+  transition: all 0.2s ease;
+}
+
+.editorial-prose a:hover {
+  text-decoration-color: #fafafa;
+}
+
+.editorial-prose blockquote {
+  border-left: 2px solid #52525b;
+  padding-left: 1.25rem;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+  color: #a1a1aa;
+}
+
+.editorial-prose ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.editorial-prose ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.editorial-prose li {
+  margin-bottom: 0.5rem;
+}
+
+.editorial-prose code:not(pre code) {
+  font-family: var(--font-mono), "JetBrains Mono", monospace;
+  background-color: #18181b;
+  color: #f4f4f5;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  border: 1px solid #27272a;
+}
+
+.editorial-prose hr {
+  border: 0;
+  border-top: 1px solid #27272a;
+  margin: 2.5rem 0;
+}
+
+.editorial-prose img {
+  border-radius: 0.25rem;
+  margin: 1.5rem 0;
+  width: 100%;
+  border: 1px solid #27272a;
+}
+
+/* Shiki code container */
+.shiki-wrapper {
+  position: relative;
+  margin: 1.75rem 0;
+  border-radius: 0.375rem;
+  border: 1px solid #27272a;
+  background-color: #0d0d0f;
+  overflow: hidden;
+}
+
+.shiki-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: #18181b;
+  border-bottom: 1px solid #27272a;
+  font-family: var(--font-mono), "JetBrains Mono", monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a1a1aa;
+}
+
+.shiki-wrapper pre {
+  margin: 0 !important;
+  padding: 1.25rem 1rem !important;
+  overflow-x: auto;
+  font-family: var(--font-mono), "JetBrains Mono", monospace;
+  font-size: 0.875rem !important;
+  line-height: 1.7 !important;
+}
+
+/* Analog Noise Texture Overlay */
+.noise-overlay::before {
+  content: "";
+  position: fixed;
+  inset: -10rem;
+  width: calc(100% + 20rem);
+  height: calc(100% + 20rem);
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 99;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
