@@ -409,13 +409,6 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
                 >
                   Enter Silently
                 </button>
-                <button
-                  type="button"
-                  onClick={() => handleEnter(false)}
-                  className="text-stone-600 hover:text-stone-950 px-3 py-3.5 min-h-[44px] underline decoration-stone-400 underline-offset-4 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-stone-900 focus-visible:outline-none"
-                >
-                  Skip Intro ⤑
-                </button>
               </div>
             </div>
 
@@ -457,7 +450,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
         className="relative w-full overflow-hidden bg-stone-950 text-stone-100 select-none pb-10 border-b border-white/10 focus:outline-none"
       >
         {/* Floating inverting wordmark (mix-blend-difference) */}
-        <div className="absolute top-10 left-1/2 -translate-x-1/2 z-20 pointer-events-none select-none mix-blend-difference text-white w-full max-w-6xl px-4 text-center">
+        <div className="absolute top-24 md:top-28 left-1/2 -translate-x-1/2 z-20 pointer-events-none select-none mix-blend-difference text-white w-full max-w-6xl px-4 text-center">
           <div className="flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
             {wordmarkMorph === 0 ? (
               <div className="space-y-0.5 animate-hero-fade">
@@ -482,7 +475,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
         </div>
 
         {/* Runway Telemetry Header */}
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 pt-6 pb-4 flex items-center justify-between text-xs font-mono uppercase tracking-widest text-stone-400">
+        <div className="relative z-30 w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 pt-6 pb-4 flex items-center justify-between text-xs font-mono uppercase tracking-widest text-stone-400">
           <div className="flex items-center gap-3">
             <span className="text-stone-200 font-bold">
               RUNWAY [{slides[activeSlideIndex]?.num || "01"} / {slides.length}]
@@ -530,7 +523,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
         </div>
 
         {/* The Draggable & Keyboard-Accessible Horizontal Filmstrip */}
-        <div className="pt-24 md:pt-32 pb-4">
+        <div className="pt-36 md:pt-44 pb-4">
           <div
             ref={reelRef}
             tabIndex={0}
@@ -555,11 +548,11 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
             {slides.map((item) => (
               <div
                 key={item.id}
-                className="group relative min-w-[20rem] sm:min-w-[24rem] md:min-w-[28rem] rounded-xs bg-stone-900/90 border border-stone-800 p-6 md:p-7 flex flex-col justify-between shrink-0 shadow-2xl transition-all duration-300 hover:border-stone-500 hover:shadow-stone-950/80"
+                className="group relative w-[20rem] sm:w-[24rem] md:w-[28rem] min-w-[20rem] rounded-xs bg-stone-900/90 border border-stone-800 p-6 md:p-7 flex flex-col justify-between shrink-0 overflow-hidden shadow-2xl transition-all duration-300 hover:border-stone-500 hover:shadow-stone-950/80"
               >
                 {/* Card Top: Number + Type + Metrics */}
                 <div className="flex items-center justify-between text-xs font-mono text-stone-400 border-b border-stone-800 pb-3">
-                  <div className="flex items-center gap-2">
+                  <div className="flex min-w-0 items-center gap-2">
                     <span className="text-stone-100 font-bold tracking-widest text-sm">
                       {item.num}
                     </span>
@@ -568,7 +561,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
                       {item.type}
                     </span>
                   </div>
-                  <span className="text-[10px] bg-stone-950 px-2 py-0.5 rounded-xs text-stone-300 border border-stone-800 font-mono">
+                  <span className="max-w-[55%] truncate text-[10px] bg-stone-950 px-2 py-0.5 rounded-xs text-stone-300 border border-stone-800 font-mono">
                     {item.metrics}
                   </span>
                 </div>
