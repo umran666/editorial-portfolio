@@ -416,7 +416,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
             <div className="lg:col-span-5 bg-stone-200/60 border border-stone-300 p-6 font-mono text-xs">
               <div className="flex justify-between items-center pb-3 border-b border-stone-300 text-stone-500 uppercase tracking-widest text-[10px]">
                 <span>Archival Index</span>
-                <span>9 Research Nodes</span>
+                <span>{slides.length} Research Nodes</span>
               </div>
               <ul className="divide-y divide-stone-300/60 mt-2 text-[11px] leading-loose">
                 {slides.map((s) => (

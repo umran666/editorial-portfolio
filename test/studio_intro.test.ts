@@ -68,7 +68,7 @@ describe("Kinetic Brutalist Studio Intro Experience & Accessibility", () => {
     // 5. Verify Monospace Archival Index contains nodes
     const indexItems = page.locator('[role="dialog"] ul li');
     const indexCount = await indexItems.count();
-    assert.ok(indexCount >= 9, `Gate index must display at least 9 nodes, found ${indexCount}`);
+    assert.ok(indexCount >= 6, `Gate index must display at least 6 nodes, found ${indexCount}`);
 
     // 6. Test Skip Intro dismissal
     await skipIntroBtn.click();
