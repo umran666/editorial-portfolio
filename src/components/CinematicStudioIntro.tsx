@@ -147,7 +147,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
     if (prefersReducedMotion) {
       setGateOpen(true);
       sessionStorage.setItem("su_gate_unlocked", "true");
-      setTimeout(() => runwayRef.current?.focus(), 50);
+      setTimeout(() => runwayRef.current?.focus({ preventScroll: true }), 50);
       return;
     }
 
@@ -156,7 +156,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
       setGateOpen(true);
       setGateFading(false);
       sessionStorage.setItem("su_gate_unlocked", "true");
-      runwayRef.current?.focus();
+      runwayRef.current?.focus({ preventScroll: true });
     }, 600);
   };
 
@@ -450,7 +450,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
         className="relative w-full overflow-hidden bg-stone-950 text-stone-100 select-none pb-10 border-b border-white/10 focus:outline-none"
       >
         {/* Floating inverting wordmark (mix-blend-difference) */}
-        <div className="absolute top-24 md:top-28 left-1/2 -translate-x-1/2 z-20 pointer-events-none select-none mix-blend-difference text-white w-full max-w-6xl px-4 text-center">
+        <div className="absolute top-36 md:top-40 left-1/2 -translate-x-1/2 z-20 pointer-events-none select-none mix-blend-difference text-white w-full max-w-6xl px-4 text-center">
           <div className="flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
             {wordmarkMorph === 0 ? (
               <div className="space-y-0.5 animate-hero-fade">
@@ -523,7 +523,7 @@ export function CinematicStudioIntro({ projects, articles }: CinematicStudioIntr
         </div>
 
         {/* The Draggable & Keyboard-Accessible Horizontal Filmstrip */}
-        <div className="pt-36 md:pt-44 pb-4">
+        <div className="pt-40 md:pt-48 pb-4">
           <div
             ref={reelRef}
             tabIndex={0}
