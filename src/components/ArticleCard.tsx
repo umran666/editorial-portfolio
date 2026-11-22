@@ -47,7 +47,7 @@ export function ArticleCard({ article, showCover = true }: ArticleCardProps) {
                   {article.title}
                 </p>
                 <p className="text-xs font-mono text-stone-500">
-                  Shaik Umran — Research Monograph
+                  Shaik Umran — Lab Note
                 </p>
               </div>
             </div>
@@ -78,7 +78,7 @@ export function ArticleCard({ article, showCover = true }: ArticleCardProps) {
             href={`/articles/${article.slug}`}
             className="font-mono text-xs uppercase tracking-wider text-stone-100 ml-2 hover:underline decoration-stone-400 underline-offset-4 transition-all inline-block"
           >
-            Read monograph →
+            Read note →
           </Link>
         </div>
 

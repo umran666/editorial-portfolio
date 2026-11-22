@@ -3,128 +3,95 @@
 import Link from "next/link";
 
 interface EditorialHeroProps {
-  totalSystems: number;
-  totalArticles: number;
+  totalProjects: number;
+  totalNotes: number;
 }
 
-export function EditorialHero({ totalSystems, totalArticles }: EditorialHeroProps) {
-  const scrollToTimeline = (e: React.MouseEvent) => {
+export function EditorialHero({ totalProjects, totalNotes }: EditorialHeroProps) {
+  const scrollToTimeline = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const target = document.getElementById("timeline");
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
-    }
+    document.getElementById("timeline")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <section className="relative w-full border-b border-white/10 bg-stone-950 text-stone-100 min-h-[85vh] md:min-h-[90vh] py-10 md:py-16 overflow-hidden flex flex-col justify-between">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 flex flex-col justify-between grow">
-        {/* Top Status & Telemetry Bar */}
-        <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono uppercase tracking-widest text-stone-500 animate-hero-fade">
-          <div className="flex items-center gap-3">
-            <span className="text-stone-300 font-bold">SHA-2026 // INDEX</span>
-            <span className="text-stone-700">|</span>
-            <span className="text-stone-400">
-              {totalSystems} Systems · {totalArticles} Monographs
-            </span>
+    <section className="relative overflow-hidden border-b border-white/10 bg-stone-950 text-stone-100">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.12),transparent_32%)]" />
+      <div className="relative mx-auto grid min-h-[78vh] w-full max-w-7xl gap-12 px-4 py-12 sm:px-6 md:min-h-[82vh] md:px-8 md:py-16 lg:grid-cols-[1.35fr_0.65fr] lg:gap-20 lg:px-12 lg:py-20">
+        <div className="flex flex-col justify-between gap-12">
+          <div className="flex items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[0.28em] text-stone-500">
+            <span className="text-stone-300">AI RESEARCH LAB // 01</span>
+            <span>FIELD JOURNAL · 2026</span>
           </div>
-          <div className="flex items-center gap-4 text-[11px]">
-            <span className="hidden md:inline text-stone-600">
-              COORD: 13.6288° N, 79.4192° E
-            </span>
-            <span className="text-stone-400 flex items-center gap-1.5">
-              <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              LIVE ARCHIVE
-            </span>
-          </div>
-        </div>
 
-        {/* Main Massive Editorial Typography Hero */}
-        <div className="my-auto py-8 md:py-12 flex flex-col gap-8 md:gap-10 animate-hero-fade-delay-1">
-          <div className="space-y-2 md:space-y-4">
-            <p className="font-mono text-xs md:text-sm uppercase tracking-[0.3em] text-stone-400 font-medium">
-              AI/ML Researcher & Software Engineer
+          <div className="max-w-4xl">
+            <p className="mb-5 font-mono text-xs uppercase tracking-[0.3em] text-blue-300/80">
+              Tokenization · inference memory · model behavior
             </p>
-            <h1 className="font-geist font-black text-4xl sm:text-6xl md:text-8xl lg:text-9xl tracking-tighter uppercase leading-[0.88] text-stone-100 select-none break-words">
-              Shaik Umran
+            <h1 className="max-w-5xl font-geist text-[clamp(3.25rem,9vw,8.5rem)] font-black uppercase leading-[0.86] tracking-[-0.075em] text-stone-100">
+              Research
+              <br />
+              <span className="text-stone-500">in public.</span>
             </h1>
-            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xl sm:text-3xl md:text-5xl font-geist font-semibold tracking-tight text-stone-300">
-              <span>Tokenizers, Model Behavior</span>
-              <span className="font-light text-stone-600">&</span>
-              <span className="text-stone-100">Inference Systems</span>
-            </div>
+            <p className="mt-8 max-w-2xl text-base leading-relaxed text-stone-300 sm:text-lg md:text-xl">
+              A working record of the code, experiments, failures, and questions behind small AI systems. I study what happens below the prompt surface: how text becomes tokens, where generation memory goes, and how controlled changes alter model behavior.
+            </p>
           </div>
 
-          {/* Plain-language description of the work in this archive */}
-          <p className="font-sans text-base sm:text-lg md:text-xl text-stone-300 max-w-3xl leading-relaxed font-normal">
-            I work on the parts of language models that usually disappear behind an API: how text
-            becomes tokens, how cache memory grows during generation, and what changes when a
-            concept is removed from a diffusion model. This archive holds the code, experiments,
-            and notes.
+          <div className="flex flex-col gap-6 border-t border-stone-800 pt-6 sm:flex-row sm:items-end sm:justify-between">
+            <div className="grid grid-cols-2 gap-x-10 gap-y-5 font-mono text-xs sm:grid-cols-4">
+              <div>
+                <span className="block text-[10px] uppercase tracking-widest text-stone-600">Projects</span>
+                <span className="mt-1 block text-stone-200">{String(totalProjects).padStart(2, "0")}</span>
+              </div>
+              <div>
+                <span className="block text-[10px] uppercase tracking-widest text-stone-600">Notes</span>
+                <span className="mt-1 block text-stone-200">{String(totalNotes).padStart(2, "0")}</span>
+              </div>
+              <div>
+                <span className="block text-[10px] uppercase tracking-widest text-stone-600">Stack</span>
+                <span className="mt-1 block text-stone-200">Python / Rust</span>
+              </div>
+              <div>
+                <span className="block text-[10px] uppercase tracking-widest text-stone-600">Mode</span>
+                <span className="mt-1 block text-blue-300">Evidence-led</span>
+              </div>
+            </div>
+            <a
+              href="#timeline"
+              onClick={scrollToTimeline}
+              className="inline-flex min-h-11 items-center gap-2 font-mono text-xs uppercase tracking-widest text-stone-300 transition-colors hover:text-white"
+            >
+              Open lab log <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+        </div>
+
+        <aside className="self-end border border-stone-800 bg-stone-900/60 p-5 sm:p-7">
+          <div className="flex items-center justify-between border-b border-stone-800 pb-4 font-mono text-[10px] uppercase tracking-[0.2em]">
+            <span className="text-stone-500">Working threads</span>
+            <span className="text-blue-300">open</span>
+          </div>
+          <div className="divide-y divide-stone-800">
+            <Link href="/projects/uniqtoken" className="group block py-5">
+              <span className="font-mono text-[10px] text-stone-600">01 / TOKENIZATION</span>
+              <span className="mt-2 block font-geist text-xl font-bold tracking-tight text-stone-100 transition-colors group-hover:text-blue-200">UniqToken</span>
+              <span className="mt-2 block text-sm leading-relaxed text-stone-400">Vocabulary construction, Unicode boundaries, and tokenizer evidence.</span>
+            </Link>
+            <Link href="/projects/uniqkache" className="group block py-5">
+              <span className="font-mono text-[10px] text-stone-600">02 / INFERENCE MEMORY</span>
+              <span className="mt-2 block font-geist text-xl font-bold tracking-tight text-stone-100 transition-colors group-hover:text-blue-200">UniqKache</span>
+              <span className="mt-2 block text-sm leading-relaxed text-stone-400">A notebook on KV-cache geometry and long-context trade-offs.</span>
+            </Link>
+            <Link href="/projects/diffusion-gemma" className="group block py-5">
+              <span className="font-mono text-[10px] text-stone-600">03 / MODEL BEHAVIOR</span>
+              <span className="mt-2 block font-geist text-xl font-bold tracking-tight text-stone-100 transition-colors group-hover:text-blue-200">DiffusionGemma</span>
+              <span className="mt-2 block text-sm leading-relaxed text-stone-400">Controlled interventions, representation questions, and limits.</span>
+            </Link>
+          </div>
+          <p className="border-t border-stone-800 pt-4 font-mono text-[10px] uppercase leading-relaxed tracking-wider text-stone-600">
+            No finished-product theatre. Results appear when the method and evidence can be shown.
           </p>
-
-          {/* Monospace Telemetry Strip */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-stone-850 font-mono text-xs animate-hero-fade-delay-2">
-            <div className="space-y-1">
-              <span className="text-stone-500 uppercase tracking-widest text-[10px] block">
-                Core Discipline
-              </span>
-              <p className="text-stone-200 font-medium">NLP & Tokenizers</p>
-            </div>
-            <div className="space-y-1">
-              <span className="text-stone-500 uppercase tracking-widest text-[10px] block">
-                Inference Runtime
-              </span>
-              <p className="text-stone-200 font-medium">KV-Cache & Latency</p>
-            </div>
-            <div className="space-y-1">
-              <span className="text-stone-500 uppercase tracking-widest text-[10px] block">
-                Deep Learning
-              </span>
-              <p className="text-stone-200 font-medium">Diffusion Models</p>
-            </div>
-            <div className="space-y-1">
-              <span className="text-stone-500 uppercase tracking-widest text-[10px] block">
-                Credentials
-              </span>
-              <p className="text-stone-200 font-medium whitespace-nowrap">B.Tech CSE · 9.11 CGPA</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Bar: Quick Node Coordinates & Scroll Action */}
-        <div className="w-full pt-6 border-t border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-mono animate-hero-fade-delay-3">
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-stone-400">
-            <span className="text-stone-500 uppercase tracking-wider text-[11px]">Primary Nodes:</span>
-            <Link
-              href="/projects/uniqtoken"
-              className="hover:text-stone-100 underline decoration-stone-700 underline-offset-4 transition-colors"
-            >
-              [01] UniqToken
-            </Link>
-            <Link
-              href="/projects/diffusion-gemma"
-              className="hover:text-stone-100 underline decoration-stone-700 underline-offset-4 transition-colors"
-            >
-              [02] DiffusionGemma
-            </Link>
-            <Link
-              href="/projects/uniqkache"
-              className="hover:text-stone-100 underline decoration-stone-700 underline-offset-4 transition-colors"
-            >
-              [03] UniqKache
-            </Link>
-          </div>
-
-          <a
-            href="#timeline"
-            onClick={scrollToTimeline}
-            className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-stone-300 hover:text-white transition-colors group cursor-pointer"
-          >
-            <span>Explore Archival Timeline</span>
-            <span className="transition-transform group-hover:translate-y-0.5">↓</span>
-          </a>
-        </div>
+        </aside>
       </div>
     </section>
   );

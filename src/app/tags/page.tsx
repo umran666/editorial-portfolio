@@ -5,8 +5,8 @@ import { Footer } from "@/components/Footer";
 import { getAllTags, getSiteConfig } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Taxonomy Index & Topics — Shaik Umran",
-  description: "Browse all topics, systems domains, and themes indexed across essays and case studies.",
+  title: "Research Index & Topics — Shaik Umran",
+  description: "Browse the topics attached to the lab notes and research projects.",
 };
 
 export default async function TagsIndexPage() {
@@ -21,13 +21,13 @@ export default async function TagsIndexPage() {
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-12 md:py-16 flex flex-col gap-10 pb-24">
           <section className="text-left border-b border-stone-850 pb-8">
             <span className="font-mono text-xs uppercase tracking-widest text-stone-500">
-              RESEARCH TAXONOMY & KEYWORD GRAPH
+              RESEARCH INDEX & TOPIC GRAPH
             </span>
             <h1 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight text-stone-100 font-geist">
-              Taxonomy Index
+              Research index
             </h1>
             <p className="text-stone-400 font-sans text-base md:text-lg max-w-2xl mt-2 font-normal">
-              An index of all subjects, research disciplines, and concepts explored across systems and writing.
+              An index of the subjects and mechanisms explored across the journal.
             </p>
           </section>
 

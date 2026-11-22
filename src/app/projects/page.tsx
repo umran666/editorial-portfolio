@@ -7,8 +7,8 @@ import { getAllProjects, getSiteConfig } from "@/lib/content";
 export async function generateMetadata(): Promise<Metadata> {
   const { config } = await getSiteConfig();
   return {
-    title: `Research Systems & Implementations — ${config.authorName}`,
-    description: "Open-source research systems, tokenizer implementations, and diffusion model experiments.",
+    title: `Research Projects — ${config.authorName}`,
+    description: "Working projects in tokenization, inference memory, and model behavior.",
   };
 }
 
@@ -24,14 +24,13 @@ export default async function ProjectsIndexPage() {
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-12 md:py-16 flex flex-col gap-12 pb-24">
           <section className="text-left border-b border-stone-850 pb-8">
             <span className="font-mono text-xs uppercase tracking-widest text-stone-500">
-              OPEN-SOURCE RESEARCH SYSTEMS & RUNTIMES
+              PROJECTS // CODE + RESEARCH
             </span>
             <h1 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight text-stone-100 font-geist">
-              Engineering Systems & Models
+              Experiments & implementations
             </h1>
             <p className="text-stone-400 font-sans text-base md:text-lg max-w-2xl mt-2 font-normal">
-              Autonomous implementations in tokenization (BPE/SuperBPE), KV-cache optimization,
-              diffusion concept ablation, and medical imaging inference.
+              Code and research threads around tokenizer construction, KV-cache trade-offs, and controlled model interventions.
             </p>
           </section>
 

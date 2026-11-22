@@ -33,13 +33,13 @@ export async function generateMetadata({
   const canonicalUrl = `${siteUrl}/projects/${slug}`;
 
   return {
-    title: `${project.title} — System Spec — ${config.siteTitle}`,
+    title: `${project.title} — Research Project — ${config.siteTitle}`,
     description: project.summary,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: `${project.title} — Architecture Case Study`,
+      title: `${project.title} — Research Project`,
       description: project.summary,
       url: canonicalUrl,
       type: "website",
@@ -73,7 +73,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               href="/projects"
               className="text-xs font-mono uppercase tracking-widest text-stone-500 hover:text-stone-300 transition-colors mb-2 inline-block"
             >
-              ← Back to all systems
+              ← Back to all projects
             </Link>
 
             <div className="flex flex-wrap items-center gap-3 text-xs text-stone-400 font-mono tracking-wider uppercase font-medium">
