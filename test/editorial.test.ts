@@ -174,6 +174,27 @@ describe("2. Markdown Engine & Shiki Syntax Highlighting", () => {
     assert.ok(html.includes('rel="noopener noreferrer"'), "External link should have rel");
     assert.ok(!html.includes('href="/about" target="_blank"'), "Internal link should not have target=_blank");
   });
+
+  it("renderMarkdown should reject unsafe links and escape HTML attributes", async () => {
+    const unsafeHtml = await renderMarkdown(`[Unsafe](javascript:alert(1))`);
+    const safeHtml = await renderMarkdown(`[Safe](https://example.com/?a=1&b=2 "A & B")`);
+    const rawHtml = await renderMarkdown(`<img src=x onerror=alert(1)>`);
+
+    assert.ok(unsafeHtml.includes("Unsafe"), "Unsafe link text should remain visible");
+    assert.ok(!unsafeHtml.includes("javascript:"), "Unsafe protocols must not be rendered");
+    assert.ok(
+      safeHtml.includes('href="https://example.com/?a=1&amp;b=2"'),
+      "Safe URL attributes must be escaped"
+    );
+    assert.ok(
+      safeHtml.includes('title="A &amp; B"'),
+      "Title attributes must be escaped"
+    );
+    assert.ok(
+      rawHtml.includes("&lt;img src=x onerror=alert(1)&gt;"),
+      "Raw HTML should be rendered as text"
+    );
+  });
 });
 
 describe("3. Content & Taxonomy Queries", () => {
