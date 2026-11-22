@@ -3,7 +3,7 @@ siteTitle: "Shaik Umran — Research & Engineering Journal"
 siteSubtitle: "Language Models, Tokenizer Architectures & Diffusion Research"
 authorName: "Shaik Umran"
 authorRole: "AI/ML Researcher & Software Engineer"
-bio: "Independent AI/ML researcher and computer science engineer exploring language models, tokenizer architectures, diffusion models, and efficient AI systems through hands-on experimentation, implementation, and research."
+bio: "I build and study the parts of AI systems that are easy to hide: tokenization, inference memory, and model behavior under controlled changes."
 email: "shaikumran487@gmail.com"
 avatarUrl: "/images/avatar.jpg"
 social:
@@ -33,18 +33,18 @@ experience:
     description: "Specializing in computational linguistics, deep learning foundations, and high-performance algorithms."
 ---
 
-## Research Stance & Philosophy
+## What I keep coming back to
 
-The dominant paradigm in contemporary machine learning favors scaling parameters until empirical benchmarks concede. While compute-driven scaling produces remarkable general capabilities, it often obscures the underlying mechanical inefficiencies of model representations: sub-optimal tokenization, uncontrolled concept entanglement, and quadratic memory degradation during autoregressive generation.
+Most people meet a language model at the prompt box. I usually start one layer lower: what the text became before the model saw it, where memory went during generation, and what changed inside a diffusion model after a controlled intervention.
 
-My research focuses on **mechanical transparency, mathematical rigor, and architectural efficiency**:
+That is the common thread across my work. I like systems that can be opened up, measured, and argued with. The projects here are small research tools and experiments rather than claims of finished solutions.
 
-1. **Sub-word Tokenization as the Foundational Bottleneck:** A language model is fundamentally bounded by its vocabulary representation. UniqToken explores vocabulary allocation, byte fallback mechanisms, and multilingual representation balance from first principles.
-2. **Deterministic Model Introspection & Ablation:** Diffusion models offer rich continuous trajectories. Through DiffusionGemma, I investigate controlled concept erasure, latent steering, and behavioral phase shifts.
-3. **Inference Economics & Cache Geometry:** UniqKache interrogates how attention key-value caches can be dynamically compacted without eroding reasoning fidelity over long sequence horizons.
+### Three working threads
 
-### Current Research Trajectories
+- **UniqToken** — a tokenizer toolkit for comparing BPE, Unigram, and SuperBPE, with Unicode-aware preprocessing, byte fallback, and benchmark tooling.
+- **UniqKache** — experiments around dynamic key-value cache compaction and the memory costs of long-context inference.
+- **DiffusionGemma** — controlled concept-ablation experiments focused on how changes inside a diffusion model affect its behavior.
 
-When I am not profiling attention heads or benchmarking tokenizers in Python and Rust, I write technical observations on tokenizer design, study generative diffusion dynamics, and engineer open-source tools for the AI/ML community.
+I build these projects in Python and Rust, then write down what survived contact with the implementation. Some notes are about an idea; others are about a failure, a trade-off, or a result that needs more evidence.
 
-If you are exploring language model efficiency, novel tokenizer designs, or diffusion architectures, [get in touch via email](mailto:shaikumran487@gmail.com).
+If you are working on tokenizers, model efficiency, or diffusion systems, [send me a note](mailto:shaikumran487@gmail.com).
