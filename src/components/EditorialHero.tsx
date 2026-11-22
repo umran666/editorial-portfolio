@@ -43,23 +43,24 @@ export function EditorialHero({ totalSystems, totalArticles }: EditorialHeroProp
         <div className="my-auto py-8 md:py-12 flex flex-col gap-8 md:gap-10 animate-hero-fade-delay-1">
           <div className="space-y-2 md:space-y-4">
             <p className="font-mono text-xs md:text-sm uppercase tracking-[0.3em] text-stone-400 font-medium">
-              AI/ML Researcher & Systems Engineer
+              AI/ML Researcher & Software Engineer
             </p>
             <h1 className="font-geist font-black text-4xl sm:text-6xl md:text-8xl lg:text-9xl tracking-tighter uppercase leading-[0.88] text-stone-100 select-none break-words">
               Shaik Umran
             </h1>
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xl sm:text-3xl md:text-5xl font-geist font-semibold tracking-tight text-stone-300">
-              <span>Tokenizer Architectures</span>
+              <span>Tokenizers, Model Behavior</span>
               <span className="font-light text-stone-600">&</span>
-              <span className="text-stone-100">Diffusion Dynamics</span>
+              <span className="text-stone-100">Inference Systems</span>
             </div>
           </div>
 
-          {/* Crisp Academic Statement */}
+          {/* Plain-language description of the work in this archive */}
           <p className="font-sans text-base sm:text-lg md:text-xl text-stone-300 max-w-3xl leading-relaxed font-normal">
-            Independent researcher exploring language models, high-throughput tokenizer engines,
-            adaptive KV-cache management, and behavioral concept ablation in diffusion architectures.
-            Investigating systems at the intersection of mathematical rigor and low-latency execution.
+            I work on the parts of language models that usually disappear behind an API: how text
+            becomes tokens, how cache memory grows during generation, and what changes when a
+            concept is removed from a diffusion model. This archive holds the code, experiments,
+            and notes.
           </p>
 
           {/* Monospace Telemetry Strip */}
