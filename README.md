@@ -1,6 +1,6 @@
 # The Journal — Developer Portfolio & Literary Journal
 
-A hybrid Developer Portfolio & Editorial Journal engineered with **Next.js 15 (App Router)**, **TypeScript**, and **Tailwind CSS**. Designed with an editorial literary aesthetic matching [Vinay Umrethe's site](https://vinay.umrethe.com/), featuring local filesystem Markdown content with **Zod frontmatter validation**, zero database requirements, and full static export compatibility.
+A hybrid Developer Portfolio & Editorial Journal engineered with **Next.js 15 (App Router)**, **TypeScript**, and **Tailwind CSS**. Designed with an editorial literary aesthetic , featuring local filesystem Markdown content with **Zod frontmatter validation**, zero database requirements, and full static export compatibility.
 
 ---
 
