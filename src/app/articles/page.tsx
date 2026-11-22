@@ -7,8 +7,8 @@ import { getAllArticles, getSiteConfig } from "@/lib/content";
 export async function generateMetadata(): Promise<Metadata> {
   const { config } = await getSiteConfig();
   return {
-    title: `Monographs & Writing — ${config.authorName}`,
-    description: "Observations, tokenizer architectures, and diffusion model research.",
+    title: `Lab Notes — ${config.authorName}`,
+    description: "Technical notes on tokenization, inference memory, and model behavior.",
   };
 }
 
@@ -24,14 +24,13 @@ export default async function ArticlesIndexPage() {
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-12 md:py-16 flex flex-col gap-12 pb-24">
           <section className="text-left border-b border-stone-850 pb-8">
             <span className="font-mono text-xs uppercase tracking-widest text-stone-500">
-              WRITTEN MONOGRAPHS & RESEARCH ESSAYS
+              RESEARCH NOTES & IMPLEMENTATION LOGS
             </span>
             <h1 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight text-stone-100 font-geist">
-              Writing & Observations
+              Notes from the lab
             </h1>
             <p className="text-stone-400 font-sans text-base md:text-lg max-w-2xl mt-2 font-normal">
-              Theoretical inquiries into language model mechanics, tokenizer efficiency,
-              monastic engineering discipline, and systems architecture.
+              Short records of mechanisms, implementation decisions, experiments, and open questions.
             </p>
           </section>
 

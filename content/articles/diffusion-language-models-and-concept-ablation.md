@@ -1,55 +1,44 @@
 ---
-title: "Concept Ablation in Diffusion Language Models"
+title: "Concept Ablation in Diffusion Language Models: A Method Note"
 date: "2026-09-14"
 coverImage: "/images/articles/diffusion-ablation.svg"
-excerpt: "Quantifying orthogonal concept erasure, continuous representation steering, and generative entropy across denoising trajectories."
+excerpt: "Why diffusion trajectories make controlled representation interventions interesting, and what an ablation study must measure before it can claim erasure."
 tags:
   - "diffusion"
   - "transformers"
   - "deep learning"
-  - "research"
+  - "model behavior"
 author: "Shaik Umran"
 featured: true
 draft: false
 ---
 
-## Beyond Autoregressive Monopolies
+Autoregressive language models generate a sequence from left to right. A diffusion language model instead exposes an iterative denoising process, which creates more intervention points but also more ways to confuse a change in representation with a change in output.
 
-Autoregressive language models generate text strictly sequentially, conditioned on previous tokens:
+The useful question is not whether a vector can be subtracted. It is whether the intervention changes the target behavior while leaving unrelated behavior stable enough to interpret.
 
-$$P(x_1, \dots, x_T) = \prod_{t=1}^T P(x_t \mid x_{<t})$$
+## Orthogonal projection as a testable intervention
 
-While remarkably scalable, autoregression enforces an asymmetrical temporal bias: early errors compound inevitably, and bidirectional global editing requires re-prompting or expensive rejection sampling.
+For a latent state $\mathbf{z}_t$ and a direction $\mathbf{v}$, one simple intervention removes the component parallel to that direction:
 
-Diffusion models invert this dynamic by framing generation as continuous reverse denoising:
-
-$$q(x_t \mid x_{t-1}) = \mathcal{N}(x_t; \sqrt{1 - \beta_t} x_{t-1}, \beta_t \mathbf{I})$$
-
-Because all token positions evolve simultaneously in continuous latent space, diffusion models expose a unique capability: **direct mathematical steering and targeted concept ablation without fine-tuning weights.**
-
-## Orthogonal Projection in Latent Trajectories
-
-In my research on **DiffusionGemma**, I study how semantic concepts organize geometrically in the model's intermediate representations. If a concept vector $\mathbf{v}_c$ represents a specific stylistic attribute or domain bias, we can ablate that concept at timestep $t$ by projecting the latent representation $\mathbf{z}_t$ onto the orthogonal complement of $\mathbf{v}_c$:
-
-$$\mathbf{z}_t^{\text{ablated}} = \mathbf{z}_t - \frac{\mathbf{z}_t \cdot \mathbf{v}_c}{\|\mathbf{v}_c\|^2} \mathbf{v}_c$$
+$$\mathbf{z}_t' = \mathbf{z}_t - \frac{\mathbf{z}_t \cdot \mathbf{v}}{\|\mathbf{v}\|^2}\mathbf{v}$$
 
 ```python
 import torch
 import torch.nn.functional as F
 
-def ablate_concept_step(
-    latent: torch.Tensor, 
-    concept_direction: torch.Tensor, 
-    alpha: float = 1.0
-) -> torch.Tensor:
-    """Project intermediate diffusion latents away from a concept vector."""
-    norm_v = F.normalize(concept_direction, p=2, dim=-1)
-    parallel_component = torch.sum(latent * norm_v, dim=-1, keepdim=True) * norm_v
-    return latent - (alpha * parallel_component)
+
+def ablate_direction(latent: torch.Tensor, direction: torch.Tensor, strength: float = 1.0) -> torch.Tensor:
+    """Apply a scaled projection away from one measured direction."""
+    unit = F.normalize(direction, p=2, dim=-1)
+    component = torch.sum(latent * unit, dim=-1, keepdim=True) * unit
+    return latent - strength * component
 ```
 
-## Observations and Future Questions
+This is a mechanism, not an erasure result. The direction may not represent one clean concept, and the same direction can behave differently at different denoising steps.
 
-Our preliminary findings indicate that concept erasure early in the diffusion trajectory ($\text{timestep } t > 0.7 T$) completely restructures the semantic theme, whereas late-stage ablation ($t < 0.2 T$) merely modifies lexical choices without disrupting the underlying narrative.
+## A defensible evaluation plan
 
-The challenge remains balancing concept suppression against semantic collapse. When orthogonal projections remove too much variance from intermediate representations, the reverse diffusion process can experience sudden entropy spikes.
+A useful experiment would define the target concept independently of the intervention, compare against an untouched control, vary the intervention step and strength, and measure both target suppression and collateral change. The report should include the model revision, prompts or dataset, seeds, noise schedule, decoding settings, and evaluation method.
+
+Without those details, claims about semantic collapse, entropy spikes, or early-versus-late ablation remain hypotheses. DiffusionGemma is therefore best presented as a research thread and method notebook until a complete, reproducible result is available.

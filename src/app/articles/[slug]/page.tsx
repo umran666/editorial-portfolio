@@ -34,7 +34,7 @@ export async function generateMetadata({
   const canonicalUrl = `${siteUrl}/articles/${slug}`;
   const ogImage = article.coverImage
     ? `${siteUrl}${article.coverImage}`
-    : `${siteUrl}/images/articles/stillness.png`;
+    : `${siteUrl}/images/articles/uniqtoken.svg`;
 
   return {
     title: `${article.title} — ${config.siteTitle}`,
@@ -86,7 +86,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
+    "@type": "TechArticle",
     headline: article.title,
     description: article.excerpt,
     datePublished: article.date,
@@ -113,7 +113,7 @@ export default async function ArticlePage({ params }: PageProps) {
               href="/articles"
               className="text-xs font-mono uppercase tracking-widest text-stone-500 hover:text-stone-300 transition-colors mb-2 inline-block"
             >
-              ← Back to all monographs
+              ← Back to all lab notes
             </Link>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-stone-100 leading-tight font-geist">
@@ -167,7 +167,7 @@ export default async function ArticlePage({ params }: PageProps) {
           <div className="mt-16 pt-8 border-t border-stone-850 flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between bg-stone-900/40 p-6 rounded-xs border border-stone-800">
             <div className="space-y-1">
               <p className="font-geist font-bold text-stone-100 text-lg">
-                Monograph by {article.author}
+                Note by {article.author}
               </p>
               <p className="text-xs font-sans text-stone-400 max-w-md leading-relaxed font-normal">
                 {config.bio}
@@ -177,7 +177,7 @@ export default async function ArticlePage({ params }: PageProps) {
               href="/about"
               className="px-4 py-2 text-xs font-mono font-medium uppercase tracking-wider rounded-xs border border-stone-700 bg-stone-800 text-stone-100 hover:bg-stone-700 transition-colors shrink-0"
             >
-              Researcher Bio & Work →
+              About the researcher →
             </Link>
           </div>
         </article>

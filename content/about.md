@@ -1,50 +1,46 @@
 ---
-siteTitle: "Shaik Umran — Research & Engineering Journal"
-siteSubtitle: "Language Models, Tokenizer Architectures & Diffusion Research"
+siteTitle: "Shaik Umran — AI Research Lab Journal"
+siteSubtitle: "Tokenization, inference memory, and model behavior"
 authorName: "Shaik Umran"
-authorRole: "AI/ML Researcher & Software Engineer"
-bio: "I build and study the parts of AI systems that are easy to hide: tokenization, inference memory, and model behavior under controlled changes."
+authorRole: "Independent AI/ML Researcher & Software Engineer"
+bio: "I study AI systems by opening up the layers that are easy to hide: how text becomes tokens, how inference memory grows, and what changes when a model is intervened on."
 email: "shaikumran487@gmail.com"
 avatarUrl: "/images/avatar.jpg"
 social:
   github: "https://github.com/umran666"
   huggingface: "https://huggingface.co/Umranz"
   linkedin: "https://linkedin.com/in/shaik-umran-2729bb359"
-  twitter: "https://x.com/umran_shaik"
-  portfolio: "https://portfolio-theta-rust-tv2yg490pa.vercel.app/"
   rss: "/rss.xml"
 skills:
-  - "Python & SQL"
-  - "Machine Learning & Deep Learning"
-  - "NLP, Transformers & LLMs"
-  - "Tokenizer Engineering (BPE, Unigram, SuperBPE)"
-  - "Retrieval-Augmented Generation (RAG)"
-  - "PyTorch, Hugging Face & LangChain"
-  - "Diffusion Models & Concept Ablation"
-  - "KV-Cache Optimization & Long-Context Efficiency"
+  - "Python & Rust"
+  - "Tokenizers & NLP"
+  - "Transformers & LLMs"
+  - "Inference Memory & KV Caches"
+  - "Diffusion Models & Ablation"
+  - "PyTorch & Hugging Face"
 experience:
   - role: "Independent AI/ML Researcher"
-    company: "Autonomous Research Lab"
+    company: "Independent work"
     period: "2024 — Present"
-    description: "Architected UniqToken from scratch, engineered adaptive KV-cache management algorithms (UniqKache), and performed empirical concept ablation on diffusion models (DiffusionGemma)."
-  - role: "B.Tech in Computer Science & Engineering (CGPA: 9.11/10)"
+    description: "Building, testing, and documenting small research tools around tokenization, inference efficiency, and model behavior."
+  - role: "B.Tech in Computer Science & Engineering"
     company: "Mohan Babu University"
     period: "2023 — 2027 (Expected)"
-    description: "Specializing in computational linguistics, deep learning foundations, and high-performance algorithms."
+    description: "Studying computer science foundations alongside hands-on work in machine learning systems."
 ---
 
-## What I keep coming back to
+## What this journal records
 
-Most people meet a language model at the prompt box. I usually start one layer lower: what the text became before the model saw it, where memory went during generation, and what changed inside a diffusion model after a controlled intervention.
+Most people meet a language model at the prompt box. I usually start one layer lower: what the text became before the model saw it, where memory went during generation, and what changed inside a model after a controlled intervention.
 
-That is the common thread across my work. I like systems that can be opened up, measured, and argued with. The projects here are small research tools and experiments rather than claims of finished solutions.
+This is a lab journal, not a catalogue of finished products. Each entry should make clear whether it is an implementation, an experiment, a design hypothesis, or a result that has been measured carefully enough to share.
 
-### Three working threads
+### Current threads
 
-- **UniqToken** — a tokenizer toolkit for comparing BPE, Unigram, and SuperBPE, with Unicode-aware preprocessing, byte fallback, and benchmark tooling.
-- **UniqKache** — experiments around dynamic key-value cache compaction and the memory costs of long-context inference.
-- **DiffusionGemma** — controlled concept-ablation experiments focused on how changes inside a diffusion model affect its behavior.
+- **UniqToken** — a tokenizer research toolkit with Unigram and BPE training, CEM/SuperBPE extensions, Unicode-aware preprocessing, byte fallback, offsets, and a bundled Rust extension.
+- **UniqKache** — an investigation into adaptive key-value cache compaction and the memory costs of long-context inference.
+- **DiffusionGemma** — a research thread on controlled interventions in diffusion-based language models and the behavior they change.
 
-I build these projects in Python and Rust, then write down what survived contact with the implementation. Some notes are about an idea; others are about a failure, a trade-off, or a result that needs more evidence.
+I write down what survives contact with the implementation: the useful result, the failed assumption, the missing measurement, and the next experiment. When evidence is incomplete, the note should say so.
 
-If you are working on tokenizers, model efficiency, or diffusion systems, [send me a note](mailto:shaikumran487@gmail.com).
+If you are working on tokenizers, model efficiency, or model behavior, [send me a note](mailto:shaikumran487@gmail.com).

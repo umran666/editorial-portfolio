@@ -1,7 +1,7 @@
 ---
-title: "UniqToken: Tokenizer Architecture From Scratch"
+title: "UniqToken: A Tokenizer Research Toolkit"
 date: "2026-10-15"
-summary: "A high-performance tokenizer implementation developed from scratch, exploring Byte-Pair Encoding (BPE), Unigram, SuperBPE, byte fallback, Unicode-aware preprocessing, multilingual vocabulary allocation, and benchmarking."
+summary: "A Python tokenizer toolkit with a bundled Rust extension for studying vocabulary construction, Unicode boundaries, compatibility, and tokenizer measurements."
 tags:
   - "tokenization"
   - "nlp"
@@ -11,52 +11,30 @@ tags:
 techStack:
   - "Python"
   - "Rust"
-  - "BPE / Unigram"
-  - "NLP"
+  - "Unigram / BPE"
+  - "Unicode"
   - "Benchmarking"
 githubUrl: "https://github.com/umran666/UniqToken"
-liveDemoUrl: "https://github.com/umran666/UniqToken"
 featured: true
-role: "Lead Researcher & Author"
-metrics: "BPE & Unigram · SuperBPE · Byte-Fallback · Sub-ms Tokenization"
+role: "Research toolkit"
 draft: false
 ---
 
-## Architectural Problem Statement
+## What the repository actually contains
 
-The majority of contemporary language modeling tutorials treat tokenization as an opaque preprocessing utility: text enters, integer vectors emerge. However, sub-word tokenization dictates the vocabulary geometry, compression ratio, fertility rate across non-Latin scripts, and fundamental reasoning capabilities of the downstream transformer.
+[UniqToken](https://github.com/umran666/UniqToken) is a tokenizer research toolkit with a bundled Rust extension. The published v1.0.0 release supports Unigram and BPE training, CEM/SuperBPE vocabulary extension, compatibility importers, Unicode-aware preprocessing, offsets, batch encoding and decoding, and Hugging Face/GGUF integration surfaces.
 
-**UniqToken** was developed from first principles to inspect and benchmark every layer of modern tokenization pipelines without external black-box abstractions.
+The important boundary is that a tokenizer is not a language model. A newly trained vocabulary still needs a model trained or adapted for its token IDs. Preserving tokenizer IDs or improving segmentation measurements does not by itself establish better downstream language quality.
 
-## Key Technical Decisions & Innovations
+## Technical surface
 
-### 1. Unified Algorithm Support: BPE, Unigram & SuperBPE
-UniqToken implements and compares multiple core tokenization algorithms:
-- **Byte-Pair Encoding (BPE):** Deterministic merge-rule generation over pre-tokenized frequency tables.
-- **Unigram Language Model:** Probabilistic sub-word pruning optimizing global corpus likelihood with the Viterbi decoding path.
-- **SuperBPE:** Experimental hybrid merges optimizing sequence compression across multilingual domains.
+- **Training:** Unigram training with EM and Viterbi segmentation, BPE training, and optional CEM/SuperBPE extension.
+- **Text handling:** configurable normalization, Unicode-aware pre-tokenization, raw-text spans, and conditional UTF-8 byte fallback.
+- **Compatibility:** importers for tiktoken ranks, Hugging Face Unigram/ByteLevel BPE JSON, and SentencePiece Unigram models, with documented fidelity limits.
+- **Execution:** Python APIs, a CLI, and Rust acceleration for selected hot paths.
 
-### 2. Byte-Fallback & Unicode Normalization
-Out-of-vocabulary tokens (OOV) degrade downstream performance. UniqToken incorporates clean byte-level decomposition:
-- Any unmapped character sequence gracefully falls back into its UTF-8 raw byte representations (`<0x00>` to `<0xFF>`).
-- Normalization pipelines enforce NFKC standards while preserving semantic whitespace markers.
+A small example from the repository uses `CustomTokenizer.train_from_corpus`, then checks encoding, decoding, offsets, and save/load behavior. That is a more honest description of the project than calling it a universal replacement for existing tokenizers.
 
-```python
-# UniqToken Byte Fallback Example
-from uniqtoken import UniqTokenizer
+## Evidence boundary
 
-tokenizer = UniqTokenizer.train(
-    corpus_path="corpus.txt",
-    vocab_size=32000,
-    algorithm="bpe",
-    byte_fallback=True
-)
-
-tokens = tokenizer.encode("Researching efficient AI architectures.")
-print(f"Token count: {len(tokens)} | Tokens: {tokens}")
-```
-
-### 3. Empirical Benchmarks & Fertility Analysis
-UniqToken includes automated benchmarking suites analyzing:
-- **Fertility Rate:** Average tokens produced per character across English, Hindi, Arabic, and Code.
-- **Throughput:** Multi-threaded parallel tokenization throughput measured in megabytes per second.
+The repository contains separate benchmark and research records, including a post-release native performance study and a Phase B screening report. Those documents include their own hardware, revision, protocol, and limitation details. Phase C is explicitly marked as not executed, so this page makes no confirmatory multilingual or model-quality claim.

@@ -45,7 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: config.bio,
       images: [
         {
-          url: "/images/articles/stillness.png",
+          url: "/images/articles/uniqtoken.svg",
           width: 1200,
           height: 630,
           alt: `${config.siteTitle} — ${config.authorName}`,
@@ -56,7 +56,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: `${config.siteTitle} — ${config.authorName}`,
       description: config.bio,
-      images: ["/images/articles/stillness.png"],
+      images: ["/images/articles/uniqtoken.svg"],
     },
     alternates: {
       types: {

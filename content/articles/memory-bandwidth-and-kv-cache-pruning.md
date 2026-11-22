@@ -1,8 +1,8 @@
 ---
-title: "Inference Economics: Taming the KV-Cache Bottleneck"
+title: "The KV Cache Is a Memory Problem Before It Is a Pruning Problem"
 date: "2026-08-04"
 coverImage: "/images/articles/kv-cache.svg"
-excerpt: "Why memory bandwidth dictates modern transformer scaling, and how dynamic attention sink heuristics reclaim GPU VRAM without perplexity spikes."
+excerpt: "A research note on KV-cache growth, attention-sink heuristics, and the measurements needed before cache compaction becomes a trustworthy optimization."
 tags:
   - "kv-cache"
   - "transformers"
@@ -13,55 +13,43 @@ featured: false
 draft: false
 ---
 
-## The Arithmetic Intensity Trap
+When a transformer generates one token at a time, the key-value cache grows with the sequence. The arithmetic is simple; the engineering trade-off is not. A cache policy must balance memory, bandwidth, latency, output quality, and the overhead of deciding what to retain.
 
-When deploying 7B+ parameter transformer models for production inference, engineers often look at FLOP counts to estimate latency. In practice, autoregressive token generation is almost completely **memory-bandwidth bound**.
+For batch size $B$, sequence length $L$, key-value head count $H$, head dimension $D$, and $P$ bytes per element, a simplified cache estimate is:
 
-During the decode phase, each new token requires reading the entire previous Key-Value (KV) cache from high-bandwidth memory (HBM) into SRAM:
+$$\text{KV bytes} = 2 \times B \times L \times H \times D \times P$$
 
-$$\text{KV Cache Size} = 2 \times B \times L \times H \times D \times P$$
+The expression is a capacity estimate, not a complete latency model. Layout, kernel behavior, paging, quantization, and batch scheduling all matter.
 
-Where $B$ is batch size, $L$ is sequence length, $H$ is key-value head count, $D$ is head dimension, and $P$ is precision bytes (2 for FP16/BF16). At a sequence length of 32,768 tokens, a 16-batch workload can easily exceed 40 GB of VRAM solely for the KV cache.
+## A retention policy is a hypothesis
 
-## UniqKache: Dynamic Cache Compaction
-
-In **UniqKache**, we study which tokens genuinely matter to attention heads as context length expands. The attention distribution in deep transformer layers exhibits two consistent phenomena:
-
-1. **Massive Attention Sinks:** The initial 4 to 8 prompt tokens capture disproportionately massive attention scores, regardless of their semantic content. If these initial tokens are evicted, generation immediately degenerates into high-perplexity loops.
-2. **Local Recency Bias:** The most recent $K$ tokens dictate grammatical coherence and immediate prompt dependencies.
-3. **Mid-Context Sparsity:** Tokens between the attention sinks and the recent window exhibit sparse, episodic activation.
+A common design sketch protects a small prefix, keeps a recent window, and scores the middle context. That can be a useful baseline, but terms such as “attention sink” and “local recency” should be treated as hypotheses to test for the target model and workload—not universal constants.
 
 ```python
 import torch
 
-def compute_eviction_mask(
-    attention_scores: torch.Tensor, 
-    sink_tokens: int = 4, 
-    recent_tokens: int = 512, 
-    keep_budget: int = 1024
-) -> torch.Tensor:
-    """Computes boolean retention mask preserving sinks, recency, and top-k attention mass."""
-    seq_len = attention_scores.shape[-1]
-    mask = torch.zeros(seq_len, dtype=torch.bool, device=attention_scores.device)
-    
-    # 1. Protect Sinks & Recency
-    mask[:sink_tokens] = True
-    mask[max(0, seq_len - recent_tokens):] = True
-    
-    # 2. Score remaining middle context
-    middle_indices = torch.arange(sink_tokens, max(sink_tokens, seq_len - recent_tokens), device=attention_scores.device)
-    if len(middle_indices) > 0:
-        middle_scores = attention_scores[middle_indices]
-        remaining_budget = max(0, keep_budget - sink_tokens - recent_tokens)
-        if remaining_budget < len(middle_indices):
-            top_k_middle = torch.topk(middle_scores, k=remaining_budget).indices
-            mask[middle_indices[top_k_middle]] = True
-        else:
-            mask[middle_indices] = True
-            
+
+def retention_mask(scores: torch.Tensor, keep_budget: int, prefix: int = 4, recent: int = 512) -> torch.Tensor:
+    """Keep a prefix, a recent window, then the highest-scoring middle tokens."""
+    seq_len = scores.shape[-1]
+    mask = torch.zeros(seq_len, dtype=torch.bool, device=scores.device)
+    prefix_end = min(prefix, seq_len)
+    recent_start = max(prefix_end, seq_len - recent)
+    mask[:prefix_end] = True
+    mask[recent_start:] = True
+
+    middle = torch.arange(prefix_end, recent_start, device=scores.device)
+    remaining = max(0, keep_budget - int(mask.sum().item()))
+    if middle.numel() and remaining:
+        chosen = middle if remaining >= middle.numel() else middle[torch.topk(scores[middle], k=remaining).indices]
+        mask[chosen] = True
     return mask
 ```
 
-## Practical Implications
+The guard matters: the requested budget can be smaller than the protected prefix plus recent window, and the middle can be empty. The function produces a mask; it does not prove that the retained context is sufficient.
 
-By enforcing dynamic cache compaction, UniqKache enables sustained 32k+ token context reasoning on single commodity consumer GPUs (e.g., RTX 4090) without requiring multi-GPU pipeline parallelism or expensive H100 clusters.
+## What a real experiment must report
+
+A useful cache-compaction result needs at least a baseline policy, model and implementation revision, context lengths, batch shape, device, precision, latency measurement method, memory measurement method, and a quality metric. If the workload is a language-model continuation task, perplexity drift may be relevant; for instruction following or retrieval, task-level behavior may matter more.
+
+Until those conditions are recorded together, the responsible conclusion is narrower: cache compaction is a promising systems question, and UniqKache is a place to test it—not evidence that a particular percentage of memory or quality has already been recovered.
