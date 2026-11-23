@@ -30,7 +30,7 @@ export async function generateMetadata({
     };
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shaikumran.dev";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shaikumran.blog";
   const canonicalUrl = `${siteUrl}/articles/${slug}`;
   const ogImage = article.coverImage
     ? `${siteUrl}${article.coverImage}`

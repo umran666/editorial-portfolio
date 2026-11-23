@@ -5,7 +5,7 @@ export async function generateRssFeed(feedPath: string = "/rss.xml"): Promise<st
   const articles = getAllArticles();
   const projects = getAllProjects();
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shaikumran.dev";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shaikumran.blog";
 
   const allItems = [
     ...articles.map((a) => ({

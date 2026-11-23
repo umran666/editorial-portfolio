@@ -281,10 +281,10 @@ describe("4. Automated RSS Feed Generation", () => {
     assert.ok(feedXml.includes("<item>"));
     assert.ok(feedXml.includes("Inside UniqToken") || feedXml.includes("UniqToken"));
     assert.ok(feedXml.includes("<guid isPermaLink=\"true\">"));
-    assert.ok(feedXml.includes('href="https://shaikumran.dev/rss.xml"'));
+    assert.ok(feedXml.includes('href="https://shaikumran.blog/rss.xml"'));
 
     // Support /feed.xml path
     const feedXmlAlt = await generateRssFeed("/feed.xml");
-    assert.ok(feedXmlAlt.includes('href="https://shaikumran.dev/feed.xml"'));
+    assert.ok(feedXmlAlt.includes('href="https://shaikumran.blog/feed.xml"'));
   });
 });

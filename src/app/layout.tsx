@@ -22,7 +22,7 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shaikumran.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shaikumran.blog";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { config } = await getSiteConfig();

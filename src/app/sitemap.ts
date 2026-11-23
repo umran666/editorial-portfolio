@@ -4,7 +4,7 @@ import { getAllArticles, getAllProjects, getAllTags } from "@/lib/content";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shaikumran.dev";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://shaikumran.blog";
 
   const staticPages: MetadataRoute.Sitemap = [
     {

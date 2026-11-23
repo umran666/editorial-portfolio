@@ -135,7 +135,7 @@ function sanitizeHref(href: string): string | null {
   }
 
   try {
-    const url = new URL(value, "https://shaikumran.dev");
+    const url = new URL(value, "https://shaikumran.blog");
     return ["http:", "https:", "mailto:", "tel:"].includes(url.protocol)
       ? value
       : null;
