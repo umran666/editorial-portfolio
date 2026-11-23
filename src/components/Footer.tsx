@@ -10,11 +10,11 @@ export function Footer({ config }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto relative z-10 w-full bg-stone-950 text-stone-300 font-sans selection:bg-stone-800 selection:text-white border-t border-stone-800">
+    <footer className="relative z-10 mt-auto w-full border-t border-blue-200/15 bg-[#101827] font-sans text-slate-300 selection:bg-blue-900/50 selection:text-white">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-16 md:py-20 text-center">
         {/* Profile Head */}
         <div className="flex flex-col items-center gap-4">
-          <div className="relative h-20 w-20 overflow-hidden rounded-full ring-2 ring-stone-800 shadow-2xl">
+          <div className="relative h-20 w-20 overflow-hidden rounded-full ring-2 ring-blue-200/20 shadow-2xl">
             <Image
               src={config.avatarUrl || "/images/avatar.jpg"}
               alt={config.authorName}
@@ -35,7 +35,7 @@ export function Footer({ config }: FooterProps) {
 
         {/* Elsewhere Social Coordinates */}
         <div className="mt-8">
-          <p className="text-xs font-mono font-semibold uppercase tracking-[0.24em] text-stone-500">
+          <p className="text-xs font-mono font-semibold uppercase tracking-[0.24em] text-blue-200/60">
             Research links
           </p>
           <div className="mt-4 flex flex-wrap items-center justify-center gap-3 font-mono text-xs">
@@ -44,7 +44,7 @@ export function Footer({ config }: FooterProps) {
                 href={config.social.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xs border border-stone-800 bg-stone-900/60 px-3.5 py-1.5 font-medium text-stone-300 transition-all hover:border-stone-500 hover:bg-stone-850 hover:text-white"
+                className="inline-flex items-center gap-2 rounded-xs border border-blue-200/15 bg-slate-950/30 px-3.5 py-1.5 font-medium text-stone-300 transition-all hover:border-blue-200/45 hover:bg-blue-950/40 hover:text-white"
               >
                 <svg
                   className="h-3.5 w-3.5"
@@ -67,7 +67,7 @@ export function Footer({ config }: FooterProps) {
                 href={config.social.huggingface}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xs border border-stone-800 bg-stone-900/60 px-3.5 py-1.5 font-medium text-stone-300 transition-all hover:border-stone-500 hover:bg-stone-850 hover:text-white"
+                className="inline-flex items-center gap-2 rounded-xs border border-blue-200/15 bg-slate-950/30 px-3.5 py-1.5 font-medium text-stone-300 transition-all hover:border-blue-200/45 hover:bg-blue-950/40 hover:text-white"
               >
                 <span className="text-xs">🤗</span>
                 Hugging Face
@@ -79,7 +79,7 @@ export function Footer({ config }: FooterProps) {
                 href={config.social.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xs border border-stone-800 bg-stone-900/60 px-3.5 py-1.5 font-medium text-stone-300 transition-all hover:border-stone-500 hover:bg-stone-850 hover:text-white"
+                className="inline-flex items-center gap-2 rounded-xs border border-blue-200/15 bg-slate-950/30 px-3.5 py-1.5 font-medium text-stone-300 transition-all hover:border-blue-200/45 hover:bg-blue-950/40 hover:text-white"
               >
                 <svg
                   className="h-3 w-3"
@@ -98,7 +98,7 @@ export function Footer({ config }: FooterProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Subscribe to RSS Feed"
-              className="inline-flex items-center gap-2 rounded-xs border border-stone-800 bg-stone-900/60 px-3.5 py-1.5 font-medium text-stone-300 transition-all hover:border-stone-500 hover:bg-stone-850 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-xs border border-blue-200/15 bg-slate-950/30 px-3.5 py-1.5 font-medium text-stone-300 transition-all hover:border-blue-200/45 hover:bg-blue-950/40 hover:text-white"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -133,7 +133,7 @@ export function Footer({ config }: FooterProps) {
               </a>
             )}
           </p>
-          <p className="text-[11px] text-stone-600">
+          <p className="text-[11px] text-blue-100/35">
             Engineered with Next.js 15, TypeScript, Tailwind CSS & Shiki syntax highlighting.
           </p>
           <div className="flex items-center justify-center gap-4 pt-2 text-xs text-stone-400">
