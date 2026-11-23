@@ -1,10 +1,16 @@
 import { describe, it, before, after } from "node:test";
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
 import { chromium, type Browser } from "playwright-core";
 import { spawn, type ChildProcess } from "node:child_process";
 
 const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
-const CHROME_PATH = process.env.CHROME_PATH || "/usr/local/bin/chromium";
+const DEFAULT_CHROME = existsSync("/usr/bin/google-chrome")
+  ? "/usr/bin/google-chrome"
+  : existsSync("/usr/bin/chromium")
+  ? "/usr/bin/chromium"
+  : "/usr/local/bin/chromium";
+const CHROME_PATH = process.env.CHROME_PATH || DEFAULT_CHROME;
 let browser: Browser;
 let spawnedServer: ChildProcess | null = null;
 
